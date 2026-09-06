@@ -2,6 +2,6 @@ packages:
   - "packages/*"
   - "site"
 
-# esbuild needs its postinstall to place the platform binary
-onlyBuiltDependencies:
-  - esbuild
+# pnpm 11: allow esbuild's postinstall to place the platform binary
+allowBuilds:
+  esbuild: true
