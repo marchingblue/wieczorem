@@ -1,0 +1,51 @@
+/**
+ * mut progress — a rail that quietly fills. ink fill on a faint rail;
+ * the width animates so updates glide. reads --mut-progress-*.
+ */
+
+.mut-progress {
+  --mut-progress-h: 6px;
+
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  height: var(--mut-progress-h);
+  box-sizing: border-box;
+  overflow: hidden;
+
+  background: color-mix(in srgb, var(--mut-ink) 12%, transparent);
+  border-radius: var(--mut-r-full);
+}
+
+.mut-progress__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--mut-ink);
+
+  transition: width var(--mut-t-med) var(--mut-press);
+}
+
+/* indeterminate: a bar patrols, nothing is claimed */
+.mut-progress[data-indeterminate="true"] .mut-progress__fill {
+  width: 36%;
+  animation: mut-progress-patrol 1.4s ease-in-out infinite;
+}
+
+@keyframes mut-progress-patrol {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(290%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-progress__fill {
+    transition: none;
+  }
+  .mut-progress[data-indeterminate="true"] .mut-progress__fill {
+    animation: none;
+  }
+}

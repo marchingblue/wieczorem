@@ -1,0 +1,36 @@
+{
+  "name": "@mut/react",
+  "version": "0.1.0",
+  "description": "mut/ui for react — calm, natural components",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./../styles/dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@mut/styles": "workspace:*",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.2.7",
+    "react": "^19.1.0",
+    "react-dom": "^19.2.8",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.0"
+  }
+}

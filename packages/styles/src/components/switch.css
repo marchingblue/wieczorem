@@ -1,0 +1,88 @@
+/**
+ * mut switch — a latch. one design, slightly smaller. low-radius track,
+ * knob rounder than its housing and a touch smaller than the track's
+ * inner height. press nudges, release springs across. reads
+ * --mut-switch-*.
+ */
+
+.mut-switch {
+  --mut-switch-w: 36px;
+  --mut-switch-h: 20px;
+  --mut-switch-pad: 2.5px;
+  --mut-switch-radius: 5px;        /* outer: deliberately less rounded */
+  --mut-switch-knob-radius: 6px;   /* inner: the rounder of the two    */
+  --mut-switch-off: color-mix(in srgb, var(--mut-ink) 14%, var(--mut-bg));
+  --mut-switch-on: var(--mut-ink);
+  --mut-switch-knob: var(--mut-elevated);
+  --mut-switch-knob-on: var(--mut-bg);
+
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: var(--mut-switch-w);
+  height: var(--mut-switch-h);
+  padding: 0;
+  box-sizing: border-box;
+
+  background: var(--mut-switch-off);
+  border: none;
+  border-radius: var(--mut-switch-radius);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: background-color var(--mut-t-fast) ease;
+}
+
+.mut-switch:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 2px;
+}
+
+/* the knob — slightly smaller than the track's inner height */
+.mut-switch::before {
+  content: "";
+  position: absolute;
+  top: var(--mut-switch-pad);
+  left: var(--mut-switch-pad);
+  width: calc(var(--mut-switch-h) - var(--mut-switch-pad) * 2);
+  height: calc(var(--mut-switch-h) - var(--mut-switch-pad) * 2);
+  border-radius: var(--mut-switch-knob-radius);
+  background: var(--mut-switch-knob);
+
+  transform: translateX(0);
+  transition: transform var(--mut-t-med) var(--mut-spring);
+}
+
+.mut-switch:hover {
+  background: color-mix(in srgb, var(--mut-ink) 20%, var(--mut-bg));
+}
+
+/* press: a quick nudge toward where it's about to go */
+.mut-switch:active::before {
+  transform: translateX(2px);
+  transition: transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-switch[data-checked="true"] {
+  background: var(--mut-switch-on);
+}
+.mut-switch[data-checked="true"]:hover {
+  background: color-mix(in srgb, var(--mut-ink) 86%, var(--mut-bg));
+}
+
+/* travel: pad + knob width = the full slide */
+.mut-switch[data-checked="true"]::before {
+  background: var(--mut-switch-knob-on);
+  transform: translateX(calc(var(--mut-switch-w) - var(--mut-switch-h)));
+}
+.mut-switch[data-checked="true"]:active::before {
+  transform: translateX(
+    calc(var(--mut-switch-w) - var(--mut-switch-h) - 2px)
+  );
+  transition: transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}

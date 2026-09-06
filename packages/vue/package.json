@@ -1,0 +1,11 @@
+{
+  "name": "@mut/vue",
+  "version": "0.1.0",
+  "description": "mut/ui for vue — placeholder, api mirrors @mut/react 1:1",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'vue: placeholder, nothing to build yet'",
+    "typecheck": "echo 'vue: placeholder, nothing to typecheck'"
+  }
+}

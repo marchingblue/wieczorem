@@ -1,0 +1,9 @@
+packages:
+  - "packages/*"
+  - "site"
+
+# esbuild needs its postinstall to place the platform binary
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: set this to true or false

@@ -1,0 +1,117 @@
+/**
+ * mut breadcrumbs — a quiet trail. separators are faint slashes that lean
+ * a little further when the next crumb is hovered; overflow collapses to
+ * "…" after the first crumb and expands on click.
+ */
+
+.mut-crumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 2px;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  color: var(--mut-ink-muted);
+}
+
+.mut-crumbs__item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mut-crumbs__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 5px;
+  border-radius: var(--mut-r-xs);
+
+  color: var(--mut-ink-muted);
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--mut-bg);
+  border: none;
+  font: inherit;
+
+  transition:
+    color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-crumbs__link:hover {
+  color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 5%, transparent);
+}
+.mut-crumbs__link:active {
+  transform: translateY(0.5px);
+}
+.mut-crumbs__link:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 1px;
+}
+
+.mut-crumbs__item[aria-current="page"] {
+  color: var(--mut-ink);
+  padding: 2px 5px;
+}
+
+/* the separator — faint, and it leans when what follows is hovered */
+.mut-crumbs__sep {
+  display: inline-flex;
+  align-items: center;
+  color: var(--mut-ink-faint);
+  user-select: none;
+  transform-origin: center;
+  transition: transform var(--mut-t-med) var(--mut-spring);
+}
+
+.mut-crumbs__sep:has(+ .mut-crumbs__item:hover) {
+  transform: scaleX(1.6) rotate(6deg);
+}
+
+/* collapse dots — click to expand the hidden crumbs */
+.mut-crumbs__dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  padding: 2px 5px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font: inherit;
+  letter-spacing: 0.1em;
+  color: var(--mut-ink-faint);
+  cursor: pointer;
+
+  transition:
+    color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-crumbs__dots:hover {
+  color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 5%, transparent);
+}
+.mut-crumbs__dots:active {
+  transform: translateY(0.5px);
+}
+.mut-crumbs__dots:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 1px;
+}
+
+/* entering crumbs fade-rise when the trail expands */
+.mut-crumbs__item[data-entered="true"] {
+  animation: mut-crumbs-in var(--mut-t-med) var(--mut-spring);
+}
+
+@keyframes mut-crumbs-in {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+}

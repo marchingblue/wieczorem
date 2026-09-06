@@ -1,0 +1,41 @@
+/**
+ * mut spinner — the classic. a quiet arc turning on the ink color.
+ * reads --mut-spinner-*.
+ */
+
+.mut-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+
+  border: 2px solid color-mix(in srgb, var(--mut-ink) 16%, transparent);
+  border-top-color: var(--mut-ink);
+  border-radius: 50%;
+
+  animation: mut-spin 0.7s linear infinite;
+}
+
+.mut-spinner[data-size="sm"] {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+}
+
+.mut-spinner[data-size="lg"] {
+  width: 24px;
+  height: 24px;
+  border-width: 2.5px;
+}
+
+@keyframes mut-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-spinner {
+    animation-duration: 2s;
+  }
+}

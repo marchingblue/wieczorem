@@ -1,0 +1,101 @@
+/**
+ * mut dropzone — a quiet invitation. hairline outline (solid | dashed |
+ * dotted), a corner-to-corner trace on dragover, and a check that draws
+ * in when files land. reads --mut-drop-*.
+ */
+
+.mut-drop {
+  --mut-drop-style: dashed;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 28px 20px;
+  width: 100%;
+  text-align: center;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  color: var(--mut-ink-muted);
+  background: color-mix(in srgb, var(--mut-bg) 60%, transparent);
+  outline: 1.5px solid var(--mut-line);
+  outline-offset: -1.5px;
+  border-radius: var(--mut-r-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    outline-color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease;
+}
+
+/* outline styles */
+.mut-drop[data-style="dashed"] { --mut-drop-style: dashed; }
+.mut-drop[data-style="dotted"] { --mut-drop-style: dotted; }
+.mut-drop[data-style="solid"]  { --mut-drop-style: solid; }
+
+.mut-drop[data-style="dashed"] {
+  outline-style: dashed;
+}
+.mut-drop[data-style="dotted"] {
+  outline-style: dotted;
+}
+.mut-drop[data-style="solid"] {
+  outline-style: solid;
+}
+
+.mut-drop:hover {
+  outline-color: var(--mut-ink-muted);
+  background: color-mix(in srgb, var(--mut-ink) 3%, transparent);
+}
+
+/* dragover: the border wakes and the trace runs the corners */
+.mut-drop[data-over="true"] {
+  outline-color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 5%, transparent);
+}
+
+.mut-drop[data-over="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid var(--mut-ink);
+  border-color: var(--mut-ink) transparent transparent var(--mut-ink);
+  animation: mut-drop-trace 1.2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes mut-drop-trace {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-drop[data-over="true"]::after {
+    animation: none;
+  }
+}
+
+.mut-drop[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.mut-drop__hint {
+  font-size: 11px;
+  color: var(--mut-ink-faint);
+}
+
+.mut-drop.is-mut-dropped {
+  color: var(--mut-ink);
+}

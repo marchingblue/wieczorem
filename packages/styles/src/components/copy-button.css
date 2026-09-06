@@ -1,0 +1,101 @@
+/**
+ * mut copy button — a small square that borrows your text and admits it.
+ * the admit is quick — long enough to register, never long enough to wait
+ * for. reads --mut-copy-*.
+ */
+
+.mut-copy {
+  /* align with button metrics */
+  --mut-copy-size: 30px;
+  --mut-copy-radius: var(--mut-r-sm);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--mut-copy-size);
+  height: var(--mut-copy-size);
+  padding: 0;
+  box-sizing: border-box;
+
+  color: var(--mut-ink-muted);
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-copy-radius);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform var(--mut-t-fast) var(--mut-press),
+    color var(--mut-t-fast) ease,
+    border-color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease;
+}
+
+.mut-copy:hover {
+  color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 4%, transparent);
+}
+
+.mut-copy:active {
+  transform: scale(0.92) translateY(1px);
+}
+
+.mut-copy:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 2px;
+}
+
+.mut-copy:disabled {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+}
+
+.mut-copy__icons {
+  position: relative;
+  width: 15px;
+  height: 15px;
+}
+
+.mut-copy__icons svg {
+  position: absolute;
+  inset: 0;
+  color: currentColor;
+  transition:
+    opacity var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+/* copy icon leaves */
+.mut-copy[data-copied="true"] .mut-copy__icon-copy {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+/* check draws in */
+.mut-copy__icon-check {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.mut-copy__icon-check path {
+  stroke-dasharray: 1; /* pathLength=1 */
+  stroke-dashoffset: 1;
+}
+
+.mut-copy[data-copied="true"] .mut-copy__icon-check {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-copy[data-copied="true"] .mut-copy__icon-check path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--mut-t-fast) ease-out;
+}
+
+.mut-copy[data-copied="true"] {
+  color: var(--mut-ink);
+  border-color: var(--mut-ink-muted);
+}

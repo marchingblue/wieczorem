@@ -1,0 +1,60 @@
+/**
+ * mut heatmap — github-style contribution grid, all greyscale. square
+ * cells that scale slightly on hover; legend reads in the same grammar.
+ * reads --mut-heat-*.
+ */
+
+.mut-heat {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--mut-font);
+}
+
+.mut-heat__grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--mut-heat-rows, 7), 11px);
+  gap: 3px;
+}
+
+.mut-heat__cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+  transition: scale var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-heat__cell:hover {
+  scale: 1.25;
+}
+
+/* levels 0..4: 0 is the empty floor, 4 is full ink */
+.mut-heat__cell[data-level="0"] {
+  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+}
+.mut-heat__cell[data-level="1"] {
+  background: color-mix(in srgb, var(--mut-ink) 26%, transparent);
+}
+.mut-heat__cell[data-level="2"] {
+  background: color-mix(in srgb, var(--mut-ink) 48%, transparent);
+}
+.mut-heat__cell[data-level="3"] {
+  background: color-mix(in srgb, var(--mut-ink) 72%, transparent);
+}
+.mut-heat__cell[data-level="4"] {
+  background: var(--mut-ink);
+}
+
+.mut-heat__legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--mut-ink-faint);
+}
+
+.mut-heat__legend .mut-heat__cell {
+  pointer-events: none;
+}

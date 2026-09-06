@@ -1,0 +1,30 @@
+/**
+ * mut select — a closed trigger that opens the shared quiet list.
+ * the chosen value sits in the trigger; options answer with a right-side
+ * square dot. closes after picking — shadcn behavior, mut feel.
+ * reads --mut-select-*.
+ */
+
+.mut-select {
+  --mut-select-min-w: 140px;
+  position: relative;
+  display: inline-flex;
+  min-width: var(--mut-select-min-w);
+}
+
+/* the trigger is a mut-btn stretched across the select; the chevron
+   (mut-chevron, from menu.css) sits at the end */
+.mut-select__trigger {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.mut-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mut-select__value[data-placeholder="true"] {
+  color: var(--mut-ink-faint);
+}

@@ -1,0 +1,34 @@
+/**
+ * mut toggle button — pressed is a real, physical state.
+ * aria-pressed="true" = on. the on-state sinks slightly and stays sunken,
+ * like a latched key. latches don't hover — only the press and the latched
+ * state speak. reads tokens: --mut-btn-*, --mut-toggled-bg, --mut-toggled-ink.
+ */
+
+.mut-toggle {
+  --mut-toggled-bg: color-mix(in srgb, var(--mut-ink) 12%, transparent);
+  --mut-toggled-ink: var(--mut-ink);
+}
+
+.mut-toggle[aria-pressed="true"] {
+  --mut-btn-bg: var(--mut-toggled-bg);
+  --mut-btn-ink: var(--mut-toggled-ink);
+  --mut-btn-shadow: inset 0 1px 2px rgb(0 0 0 / 0.12);
+  border-color: color-mix(in srgb, var(--mut-ink) 24%, transparent);
+  /* stays slightly sunken while latched */
+  transform: translateY(0.5px);
+}
+
+/* a latch has no hover opinion: the fill IS the state */
+.mut-toggle[aria-pressed="true"]:hover {
+  background: var(--mut-toggled-bg);
+}
+
+.mut-toggle[aria-pressed="true"]:active {
+  transform: scale(var(--mut-btn-lift)) translateY(var(--mut-btn-drop));
+}
+
+.mut-toggle[data-size="sm"],
+.mut-toggle[data-size="lg"] {
+  /* radius comes from .mut-btn size rules */
+}

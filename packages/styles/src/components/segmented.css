@@ -1,0 +1,114 @@
+/**
+ * mut segmented — a pill rail with a highlight that slides between options.
+ * the highlight (glide) is measured in js and moved with transform, so it
+ * springs across regardless of option widths.
+ * reads tokens: --mut-seg-*.
+ */
+
+.mut-seg {
+  --mut-seg-radius: var(--mut-r-sm);
+  --mut-seg-bg: color-mix(in srgb, var(--mut-ink) 8%, transparent);
+  --mut-seg-highlight: var(--mut-bg);
+  --mut-seg-opt: var(--mut-bg);
+  --mut-seg-ring: var(--mut-ring);
+
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  padding: 2px;
+  box-sizing: border-box;
+
+  background: var(--mut-seg-bg);
+  border-radius: calc(var(--mut-seg-radius) + 2px);
+}
+
+/* ring only for keyboard focus, never for mouse presses */
+.mut-seg:has(.mut-seg__opt:focus-visible) {
+  outline: 2px solid var(--mut-seg-ring);
+  outline-offset: 2px;
+}
+
+/* the sliding highlight */
+.mut-seg__glide {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: calc(100% - 4px);
+  border-radius: var(--mut-seg-radius);
+  background: var(--mut-seg-highlight);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 0 0 1px var(--mut-line);
+  pointer-events: none;
+  visibility: hidden; /* hidden until measured, so it never flies in from 0,0 */
+}
+
+/* transitions only once measured — first paint lands in place */
+.mut-seg__glide[data-ready="true"] {
+  visibility: visible;
+  transition:
+    transform var(--mut-t-med) var(--mut-spring),
+    width var(--mut-t-med) var(--mut-spring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-seg__glide[data-ready="true"] {
+    transition: none;
+  }
+}
+
+.mut-seg__opt {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px 12px;
+  border: none;
+  background: var(--mut-seg-opt);
+  border-radius: var(--mut-seg-radius);
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: color var(--mut-t-fast) ease;
+}
+
+.mut-seg__opt:hover {
+  color: var(--mut-ink);
+}
+
+.mut-seg__opt[aria-checked="true"],
+.mut-seg__opt[aria-pressed="true"] {
+  color: var(--mut-ink);
+}
+
+/* press: option nudges down, highlight catches up on release */
+.mut-seg__opt:active {
+  transform: translateY(0.5px);
+}
+
+.mut-seg__opt:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: -2px;
+}
+
+.mut-seg__opt:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* dark mode: rail needs more contrast against the page */
+[data-theme="dark"] .mut-seg {
+  --mut-seg-bg: color-mix(in srgb, var(--mut-ink) 14%, transparent);
+}
+[data-theme="dark"] .mut-seg__opt {
+  color: var(--mut-g6);
+}
+[data-theme="dark"] .mut-seg__opt:hover {
+  color: var(--mut-ink);
+}

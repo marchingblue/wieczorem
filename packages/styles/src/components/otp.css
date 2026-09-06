@@ -1,0 +1,71 @@
+/**
+ * mut otp — joined cells, one shape: like a button group. dividers
+ * between neighbors, outer corners keep the rounding, focus darkens the
+ * shared border and lays a faint wash on the cell. digits only.
+ */
+
+.mut-otp {
+  display: inline-flex;
+}
+
+.mut-otp__cell {
+  width: 36px;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0;
+  text-align: center;
+
+  font-family: var(--mut-font);
+  font-size: 16px;
+  color: var(--mut-ink);
+  caret-color: var(--mut-ink);
+  background: var(--mut-bg); /* opaque: no page backdrop bleed */
+  border: 1px solid var(--mut-line);
+  border-radius: 0;
+  outline: none;
+
+  transition:
+    border-color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease;
+}
+
+/* collapse borders between neighbors */
+.mut-otp__cell + .mut-otp__cell {
+  margin-left: -1px;
+}
+
+/* outer corners round, inner corners square — the row is one shape */
+.mut-otp__cell:first-child {
+  border-top-left-radius: var(--mut-r-sm);
+  border-bottom-left-radius: var(--mut-r-sm);
+}
+.mut-otp__cell:last-child {
+  border-top-right-radius: var(--mut-r-sm);
+  border-bottom-right-radius: var(--mut-r-sm);
+}
+
+.mut-otp__cell::selection {
+  background: color-mix(in srgb, var(--mut-ink) 14%, transparent);
+}
+
+.mut-otp__cell:focus {
+  border-color: var(--mut-ink);
+  position: relative;
+  z-index: 1;
+}
+
+.mut-otp__cell[data-filled="true"] {
+  background: color-mix(in srgb, var(--mut-ink) 7%, transparent);
+}
+
+.mut-otp[data-disabled="true"] .mut-otp__cell {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* size option */
+.mut-otp[data-size="sm"] .mut-otp__cell {
+  width: 30px;
+  height: 34px;
+  font-size: 14px;
+}

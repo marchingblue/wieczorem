@@ -1,0 +1,88 @@
+/**
+ * mut radio — one dot in a circle. the group owns the value; each item is
+ * a plain label over a real input. press squishes, fill pops in.
+ * reads --mut-radio-*.
+ */
+
+.mut-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  color: var(--mut-ink);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* the real input stays focusable, just invisible */
+.mut-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.mut-radio__circle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  box-sizing: border-box;
+
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: 50%;
+
+  transition:
+    border-color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-spring);
+}
+
+.mut-radio:hover .mut-radio__circle {
+  border-color: var(--mut-ink-muted);
+}
+
+/* press squish */
+.mut-radio__input:active ~ .mut-radio__circle {
+  transform: scale(0.88);
+}
+
+.mut-radio__input:checked + .mut-radio__circle {
+  border-color: var(--mut-ink);
+}
+
+.mut-radio__input:focus-visible + .mut-radio__circle {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 2px;
+}
+
+/* the dot pops in */
+.mut-radio__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mut-ink);
+
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-spring);
+}
+
+.mut-radio__input:checked + .mut-radio__circle .mut-radio__dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.mut-radio[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}

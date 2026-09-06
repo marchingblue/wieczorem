@@ -1,0 +1,195 @@
+/**
+ * mut combobox — an input that opens the shared quiet list. type to filter,
+ * arrows to move, enter to commit, escape to close. the picked value shows
+ * in the titlebar and the list closes on pick. single mode keeps a small
+ * end dot; multi shows chips with × that pop out on remove.
+ * reads --mut-combo-*.
+ */
+
+.mut-combo {
+  --mut-combo-radius: var(--mut-r-sm);
+  position: relative;
+  display: inline-flex;
+  min-width: 220px;
+}
+
+/* the titlebar: input in single mode, chip wrap in multi */
+.mut-combo__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px 12px;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  color: var(--mut-ink);
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-combo-radius);
+
+  transition: border-color var(--mut-t-fast) ease;
+}
+
+.mut-combo__input::placeholder {
+  color: var(--mut-ink-faint);
+}
+
+.mut-combo__input:focus {
+  outline: none;
+  border-color: var(--mut-ink);
+}
+
+.mut-combo__input:disabled {
+  color: var(--mut-ink-faint);
+  background: color-mix(in srgb, var(--mut-ink) 3%, transparent);
+  cursor: not-allowed;
+}
+
+/* multi titlebar */
+.mut-combo__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+  min-height: 34px;
+  padding: 3px 6px;
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-combo-radius);
+  transition: border-color var(--mut-t-fast) ease;
+}
+
+.mut-combo__bar:focus-within {
+  border-color: var(--mut-ink);
+}
+
+.mut-combo__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 8px;
+  font-size: 12px;
+  color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 7%, transparent);
+  border-radius: var(--mut-r-xs);
+  cursor: grab;
+
+  animation: mut-rise-in var(--mut-t-fast) var(--mut-press) both;
+}
+
+.mut-combo__chip[data-dragging="true"] {
+  opacity: 0.35;
+  cursor: grabbing;
+}
+
+.mut-combo__chip-x {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  transition:
+    color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-combo__chip-x:hover {
+  color: var(--mut-ink);
+}
+
+.mut-combo__chip-x:active {
+  transform: scale(0.85);
+}
+
+.mut-combo__input--bare {
+  flex: 1;
+  min-width: 60px;
+  padding: 2px 4px;
+  border: none;
+  background: transparent;
+}
+
+.mut-combo__input--bare:focus {
+  border: none;
+}
+
+
+.mut-combo__list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  max-height: 240px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 4px;
+
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-r-sm);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
+
+  transform-origin: top;
+  animation: mut-rise-in var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-combo__opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  text-align: left;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-combo__opt:hover,
+.mut-combo__opt[data-active="true"] {
+  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+  color: var(--mut-ink);
+}
+
+.mut-combo__opt:active {
+  transform: translateY(0.5px);
+}
+
+.mut-combo__opt[aria-selected="true"] {
+  color: var(--mut-ink);
+}
+
+/* the chosen option carries a small square dot — aligned to the right */
+.mut-combo__opt[aria-selected="true"]::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  flex: none;
+  margin-left: auto;
+  border-radius: 1.5px;
+  background: var(--mut-ink);
+}
+
+.mut-combo__empty {
+  padding: 10px;
+  font-size: 12px;
+  color: var(--mut-ink-faint);
+  user-select: none;
+}

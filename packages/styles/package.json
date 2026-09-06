@@ -1,0 +1,17 @@
+{
+  "name": "@mut/styles",
+  "version": "0.1.0",
+  "description": "mut/ui design tokens and component styles",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./components/*": "./dist/components/*.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "typecheck": "echo 'styles: nothing to typecheck'"
+  }
+}

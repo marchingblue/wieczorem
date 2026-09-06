@@ -1,0 +1,98 @@
+/**
+ * mut sidebar — a widget, not a page column. an inset panel with quiet
+ * nav sections; the active item is sunken ink, items press like keys.
+ * reads --mut-side-*.
+ */
+
+.mut-side {
+  --mut-side-w: 220px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  width: var(--mut-side-w);
+  max-width: 100%;
+  padding: 12px;
+
+  background: var(--mut-surface);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-r-md);
+  font-family: var(--mut-font);
+}
+
+.mut-side__label {
+  padding: 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut-ink-faint);
+  user-select: none;
+}
+
+.mut-side__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mut-side__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  color: var(--mut-ink-muted);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-side__item:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, transparent);
+  color: var(--mut-ink);
+}
+
+.mut-side__item:active {
+  transform: translateY(0.5px);
+}
+
+/* latched: the current item stays sunken */
+.mut-side__item[aria-current="true"],
+.mut-side__item[aria-current="page"] {
+  background: color-mix(in srgb, var(--mut-ink) 10%, transparent);
+  color: var(--mut-ink);
+}
+
+.mut-side__item:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: -2px;
+}
+
+.mut-side__item:disabled {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+}
+
+.mut-side__item .mut-badge {
+  margin-left: auto;
+}
+
+.mut-side__footer {
+  padding: 8px 8px 0;
+  border-top: 1px solid var(--mut-line-soft);
+  font-size: 12px;
+  color: var(--mut-ink-faint);
+}

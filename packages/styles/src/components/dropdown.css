@@ -1,0 +1,11 @@
+/**
+ * mut dropdown — the trigger half. the chevron is always visible and
+ * rotates with the spring while the menu is open. the menu panel itself
+ * lives in menu.css.
+ */
+
+.mut-dd {
+  --mut-dd-gap: 6px;
+  position: relative;
+  display: inline-flex;
+}

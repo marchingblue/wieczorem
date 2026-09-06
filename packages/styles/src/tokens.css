@@ -1,0 +1,121 @@
+/**
+ * mut/ui tokens — single source of truth.
+ * primitives -> semantic -> component vars.
+ * override at :root (rebrand) or per-component (tweak).
+ */
+
+:root {
+  /* ---- primitives: grayscale ramp ---- */
+  --mut-g0: #0a0a0a;
+  --mut-g1: #1a1a1a;
+  --mut-g2: #2e2e2e;
+  --mut-g3: #4a4a4a;
+  --mut-g4: #6b6b6b;
+  --mut-g5: #949494;
+  --mut-g6: #b8b8b8;
+  --mut-g7: #d6d6d6;
+  --mut-g8: #e8e8e8;
+  --mut-g9: #f2f2f1;
+  --mut-g10: #f7f7f6;
+
+  /* ---- semantic (light) ---- */
+  --mut-bg: var(--mut-g10);
+  --mut-surface: var(--mut-g9);
+  --mut-ink: var(--mut-g1);
+  --mut-ink-muted: var(--mut-g4);
+  --mut-ink-faint: var(--mut-g5);
+  --mut-line: var(--mut-g7);
+  --mut-line-soft: var(--mut-g8);
+
+  /* meaning — used sparingly */
+  --mut-danger: #b3402e;
+  --mut-success: #3d7a46;
+  --mut-warning: #9a6b1f;
+
+  /* a surface guaranteed to contrast the page in both themes —
+     used by knobs, thumbs, and anything that floats on ink */
+  --mut-elevated: #ffffff;
+
+  /* focus */
+  --mut-ring: var(--mut-g3);
+
+  /* ---- smart rounding (scales with size) ---- */
+  --mut-r-xs: 4px;
+  --mut-r-sm: 6px;
+  --mut-r-md: 10px;
+  --mut-r-lg: 14px;
+  --mut-r-full: 999px;
+
+  /* ---- motion: springs, not durations ---- */
+  --mut-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* back-out overshoot */
+  --mut-press: cubic-bezier(0.3, 0, 0.4, 1);       /* quick ease-out    */
+  --mut-t-fast: 120ms;
+  --mut-t-med: 220ms;
+  --mut-t-slow: 340ms;
+
+  /* ---- type: monospaced by default ---- */
+  --mut-font:
+    ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo,
+    Consolas, monospace;
+
+  /* ---- grid backdrop (for the site; apps may ignore) ---- */
+  --mut-grid-dot: var(--mut-g7);
+}
+
+[data-theme="dark"] {
+  --mut-bg: var(--mut-g0);
+  --mut-surface: var(--mut-g1);
+  --mut-ink: var(--mut-g9);
+  --mut-ink-muted: var(--mut-g6);
+  --mut-ink-faint: var(--mut-g5);
+  --mut-line: var(--mut-g2);
+  --mut-line-soft: var(--mut-g1);
+
+  --mut-danger: #e06a55;
+  --mut-success: #6fae7c;
+  --mut-warning: #d9a852;
+
+  --mut-elevated: #171717;
+
+  --mut-ring: var(--mut-g6);
+  --mut-grid-dot: var(--mut-g2);
+}
+
+/* reduced motion: springs collapse to plain fades */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mut-spring: cubic-bezier(0.3, 0, 0.4, 1);
+    --mut-press: cubic-bezier(0.3, 0, 0.4, 1);
+  }
+}
+
+/* ---- shared keyframes ---- */
+
+@keyframes mut-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes mut-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* fast, quiet arrival for panels and lists: a 4px rise, no overshoot.
+   springs are for release, not entrance — entrance overshoot reads as pop. */
+@keyframes mut-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* exit mirrors the entrance (useExit drives data-closing) */
+@keyframes mut-rise-out {
+  to {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

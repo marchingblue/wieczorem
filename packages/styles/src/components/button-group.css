@@ -1,0 +1,61 @@
+/**
+ * mut button group — buttons joined at the hip. one border between
+ * neighbors, outer corners keep the smart rounding, focus stays visible.
+ * orientation: horizontal (default) | data-orientation="vertical".
+ */
+
+.mut-bgroup {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+/* collapse borders between neighbors */
+.mut-bgroup > .mut-btn:not(:first-child) {
+  margin-left: -1px;
+}
+
+/* outer corners round, inner corners square — the group is one shape */
+.mut-bgroup > .mut-btn {
+  --mut-btn-radius: 0;
+}
+.mut-bgroup > .mut-btn:first-child {
+  border-top-left-radius: var(--mut-r-sm);
+  border-bottom-left-radius: var(--mut-r-sm);
+}
+.mut-bgroup > .mut-btn:last-child {
+  border-top-right-radius: var(--mut-r-sm);
+  border-bottom-right-radius: var(--mut-r-sm);
+}
+.mut-bgroup > .mut-btn:only-child {
+  border-radius: var(--mut-r-sm);
+}
+
+/* keep the focus ring above the collapsed neighbor border */
+.mut-bgroup > .mut-btn:focus-visible {
+  position: relative;
+  z-index: 1;
+}
+
+/* vertical */
+.mut-bgroup[data-orientation="vertical"] {
+  flex-direction: column;
+}
+.mut-bgroup[data-orientation="vertical"] > .mut-btn:not(:first-child) {
+  margin-left: 0;
+  margin-top: -1px;
+}
+.mut-bgroup[data-orientation="vertical"] > .mut-btn:first-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: var(--mut-r-sm);
+  border-top-right-radius: var(--mut-r-sm);
+}
+.mut-bgroup[data-orientation="vertical"] > .mut-btn:last-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: var(--mut-r-sm);
+  border-bottom-right-radius: var(--mut-r-sm);
+}
+.mut-bgroup[data-orientation="vertical"] > .mut-btn:only-child {
+  border-radius: var(--mut-r-sm);
+}

@@ -1,0 +1,60 @@
+/**
+ * mut badge — a small quiet label. soft ink wash, square dot option,
+ * status tones used sparingly. reads --mut-badge-*.
+ */
+
+.mut-badge {
+  --mut-badge-bg: color-mix(in srgb, var(--mut-ink) 8%, transparent);
+  --mut-badge-ink: var(--mut-ink);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 2px 8px;
+
+  font-family: var(--mut-font);
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--mut-badge-ink);
+  background: var(--mut-badge-bg);
+  border-radius: var(--mut-r-xs);
+  white-space: nowrap;
+}
+
+/* a small square dot before the label */
+.mut-badge[data-dot="true"]::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 1.5px;
+  background: currentColor;
+}
+
+/* solid inversion */
+.mut-badge[data-tone="contrast"] {
+  --mut-badge-bg: var(--mut-ink);
+  --mut-badge-ink: var(--mut-bg);
+}
+
+/* status tones — used sparingly, meaning only */
+.mut-badge[data-tone="success"] {
+  --mut-badge-bg: color-mix(in srgb, var(--mut-success) 14%, transparent);
+  --mut-badge-ink: var(--mut-success);
+}
+.mut-badge[data-tone="warning"] {
+  --mut-badge-bg: color-mix(in srgb, var(--mut-warning) 14%, transparent);
+  --mut-badge-ink: var(--mut-warning);
+}
+.mut-badge[data-tone="danger"] {
+  --mut-badge-bg: color-mix(in srgb, var(--mut-danger) 14%, transparent);
+  --mut-badge-ink: var(--mut-danger);
+}
+
+/* outline flavor: just a border, page-colored fill */
+.mut-badge[data-look="outline"] {
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+}

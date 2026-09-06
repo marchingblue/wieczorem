@@ -1,0 +1,116 @@
+/**
+ * mut checkbox — a small square that fills to answer. no check mark:
+ * a solid ink fill with a small counter-dot is quieter and just as clear.
+ * press squishes the box. indeterminate fills with a short bar instead.
+ * reads tokens: --mut-check-*.
+ */
+
+.mut-check {
+  --mut-check-size: 18px;
+  --mut-check-radius: var(--mut-r-xs);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  color: var(--mut-ink);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* the real input stays focusable, just invisible */
+.mut-check__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.mut-check__box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--mut-check-size);
+  height: var(--mut-check-size);
+  flex: none;
+  box-sizing: border-box;
+
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-check-radius);
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    border-color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-spring);
+}
+
+.mut-check:hover .mut-check__box {
+  border-color: var(--mut-ink-muted);
+}
+
+/* press squish */
+.mut-check__input:active ~ .mut-check__box {
+  transform: scale(0.88);
+}
+
+.mut-check__input:checked + .mut-check__box,
+.mut-check__input:indeterminate + .mut-check__box {
+  background: var(--mut-ink);
+  border-color: var(--mut-ink);
+}
+
+.mut-check__input:focus-visible + .mut-check__box {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 2px;
+}
+
+/* checked: a small counter-dot pops in */
+.mut-check__dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 1.5px;
+  background: var(--mut-bg);
+
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-spring);
+}
+
+.mut-check__input:checked + .mut-check__box .mut-check__dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* indeterminate: a short bar fades in instead of the dot */
+.mut-check__bar {
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--mut-bg);
+
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition:
+    opacity var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-spring);
+}
+
+.mut-check__input:indeterminate + .mut-check__box .mut-check__bar {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.mut-check[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}

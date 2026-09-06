@@ -1,0 +1,65 @@
+/**
+ * mut dialog — a quiet interruption. overlay fades, panel arrives with
+ * mut-rise-in (fast, no scale — springs are for release, entrance is
+ * arrival). exit mirrors the entrance via useExit (data-closing).
+ * reads tokens: --mut-dialog-*.
+ */
+
+.mut-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+
+  background: color-mix(in srgb, var(--mut-g0) 34%, transparent);
+  animation: mut-fade-in var(--mut-t-fast) ease both;
+}
+
+.mut-dialog-overlay[data-closing="true"] {
+  animation: mut-fade-out var(--mut-t-fast) ease both;
+}
+
+.mut-dialog {
+  --mut-dialog-radius: var(--mut-r-md);
+
+  width: min(420px, 100%);
+  box-sizing: border-box;
+  padding: 20px;
+
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-dialog-radius);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.18);
+
+  font-family: var(--mut-font);
+
+  transform-origin: center;
+  animation: mut-rise-in var(--mut-t-fast) var(--mut-press) both;
+}
+
+.mut-dialog[data-closing="true"] {
+  animation: mut-rise-out var(--mut-t-fast) var(--mut-press) both;
+}
+
+.mut-dialog__title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--mut-ink);
+}
+
+.mut-dialog__body {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--mut-ink-muted);
+}
+
+.mut-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

@@ -1,0 +1,98 @@
+/**
+ * mut slider — a fader. the thumb is a rounded square with a circular dot
+ * in the middle. ink fill on the rail, optional step ruler beneath.
+ * single value and range both live here. reads --mut-slider-*.
+ */
+
+.mut-slider {
+  --mut-slider-h: 24px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--mut-slider-h);
+  width: 240px;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.mut-slider[data-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mut-slider__rail {
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--mut-ink) 16%, transparent);
+}
+
+.mut-slider__fill {
+  position: absolute;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--mut-ink);
+}
+
+/* the thumb: a rounded square with a circular dot */
+.mut-slider__thumb {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+
+  background: var(--mut-bg); /* opaque: never let a page backdrop bleed through */
+  border: 1px solid var(--mut-ink);
+  border-radius: 3px;
+  cursor: grab;
+
+  transform: translate(-50%, -50%);
+  transition: scale var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-slider__thumb::after {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%; /* circular dot */
+  background: var(--mut-ink);
+}
+
+.mut-slider__thumb:active {
+  cursor: grabbing;
+  scale: 1.08;
+}
+
+.mut-slider__thumb:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 2px;
+}
+
+.mut-slider__thumb[data-dragging="true"] {
+  transition: none;
+  scale: 1.08;
+}
+
+/* the step ruler: small marks under the rail at each allowed value */
+.mut-slider__steps {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 5px;
+  pointer-events: none;
+}
+
+.mut-slider__step {
+  position: absolute;
+  top: 0;
+  width: 1.5px;
+  height: 4px;
+  border-radius: 1px;
+  background: color-mix(in srgb, var(--mut-ink) 26%, transparent);
+  transform: translateX(-50%);
+}

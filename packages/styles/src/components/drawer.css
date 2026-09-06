@@ -1,0 +1,177 @@
+/**
+ * mut drawer — a panel that slides over the page from any edge. content
+ * stays still; the overlay fades. opening and closing animate the same
+ * way (exit mirrors enter, see useExit). `handle` shows a little bar on
+ * the leading edge (mainly for top/bottom sheets); `blur` frosts the
+ * overlay. reads --mut-drawer-*.
+ */
+
+.mut-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: stretch;
+  background: color-mix(in srgb, var(--mut-g0) 34%, transparent);
+  animation: mut-fade-in var(--mut-t-fast) ease both;
+}
+
+.mut-drawer-overlay[data-closing="true"] {
+  animation: mut-fade-out var(--mut-t-fast) ease both;
+}
+
+.mut-drawer-overlay[data-blur="true"] {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.mut-drawer {
+  --mut-drawer-w: 320px;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+
+  background: var(--mut-bg);
+  box-shadow: 0 0 40px rgb(0 0 0 / 0.16);
+  font-family: var(--mut-font);
+  overflow: auto;
+}
+
+/* ---- sides ---- */
+
+/* left / right: full-height panels */
+.mut-drawer[data-side="left"],
+.mut-drawer[data-side="right"] {
+  height: 100%;
+  width: var(--mut-drawer-w);
+  max-width: 86vw;
+}
+
+.mut-drawer[data-side="left"] {
+  grid-area: auto;
+  justify-self: start;
+  border-right: 1px solid var(--mut-line);
+  animation: mut-drawer-left var(--mut-t-med) var(--mut-press) both;
+}
+.mut-drawer[data-side="left"][data-closing="true"] {
+  animation: mut-drawer-left-out var(--mut-t-fast) var(--mut-press) both;
+}
+
+.mut-drawer[data-side="right"] {
+  justify-self: end;
+  border-left: 1px solid var(--mut-line);
+  animation: mut-drawer-right var(--mut-t-med) var(--mut-press) both;
+}
+.mut-drawer[data-side="right"][data-closing="true"] {
+  animation: mut-drawer-right-out var(--mut-t-fast) var(--mut-press) both;
+}
+
+/* top / bottom: sheets across the width */
+.mut-drawer[data-side="top"],
+.mut-drawer[data-side="bottom"] {
+  width: 100%;
+  max-height: 86vh;
+  height: auto;
+}
+
+.mut-drawer[data-side="top"] {
+  align-self: start;
+  border-bottom: 1px solid var(--mut-line);
+  animation: mut-drawer-top var(--mut-t-med) var(--mut-press) both;
+}
+.mut-drawer[data-side="top"][data-closing="true"] {
+  animation: mut-drawer-top-out var(--mut-t-fast) var(--mut-press) both;
+}
+
+.mut-drawer[data-side="bottom"] {
+  align-self: end;
+  border-top: 1px solid var(--mut-line);
+  animation: mut-drawer-bottom var(--mut-t-med) var(--mut-press) both;
+}
+.mut-drawer[data-side="bottom"][data-closing="true"] {
+  animation: mut-drawer-bottom-out var(--mut-t-fast) var(--mut-press) both;
+}
+
+/* the handle: a little bar on the leading edge */
+.mut-drawer__handle {
+  position: absolute;
+  border-radius: var(--mut-r-full);
+  background: color-mix(in srgb, var(--mut-ink) 24%, transparent);
+  pointer-events: none;
+}
+
+.mut-drawer[data-side="left"] .mut-drawer__handle,
+.mut-drawer[data-side="right"] .mut-drawer__handle {
+  top: 50%;
+  width: 3px;
+  height: 32px;
+  transform: translateY(-50%);
+}
+.mut-drawer[data-side="left"] .mut-drawer__handle { left: 6px; }
+.mut-drawer[data-side="right"] .mut-drawer__handle { right: 6px; }
+
+.mut-drawer[data-side="top"] .mut-drawer__handle,
+.mut-drawer[data-side="bottom"] .mut-drawer__handle {
+  left: 50%;
+  width: 32px;
+  height: 3px;
+  transform: translateX(-50%);
+}
+.mut-drawer[data-side="top"] .mut-drawer__handle { top: 6px; }
+.mut-drawer[data-side="bottom"] .mut-drawer__handle { bottom: 6px; }
+
+@keyframes mut-drawer-left {
+  from { transform: translateX(-100%); }
+}
+@keyframes mut-drawer-left-out {
+  to { transform: translateX(-100%); }
+}
+@keyframes mut-drawer-right {
+  from { transform: translateX(100%); }
+}
+@keyframes mut-drawer-right-out {
+  to { transform: translateX(100%); }
+}
+@keyframes mut-drawer-top {
+  from { transform: translateY(-100%); }
+}
+@keyframes mut-drawer-top-out {
+  to { transform: translateY(-100%); }
+}
+@keyframes mut-drawer-bottom {
+  from { transform: translateY(100%); }
+}
+@keyframes mut-drawer-bottom-out {
+  to { transform: translateY(100%); }
+}
+
+.mut-drawer__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mut-ink);
+}
+
+.mut-drawer__body {
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--mut-ink-muted);
+}
+
+/* auto margins when the sheet is shorter than the viewport */
+.mut-drawer[data-side="top"],
+.mut-drawer[data-side="bottom"] {
+  margin: auto;
+}
+.mut-drawer[data-side="top"] {
+  margin-top: 0;
+}
+.mut-drawer[data-side="bottom"] {
+  margin-bottom: 0;
+}

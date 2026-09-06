@@ -1,0 +1,57 @@
+/**
+ * mut skeleton — a placeholder with the patience of wet cement. a soft
+ * wash that breathes; corners follow smart rounding.
+ * reads --mut-skel-*.
+ */
+
+.mut-skel {
+  --mut-skel-h: 14px;
+
+  display: block;
+  height: var(--mut-skel-h);
+  box-sizing: border-box;
+
+  background: color-mix(in srgb, var(--mut-ink) 8%, transparent);
+  border-radius: var(--mut-r-xs);
+  animation: mut-skel-breathe 1.6s ease-in-out infinite;
+}
+
+/* shapes */
+.mut-skel[data-shape="text"] {
+  height: 14px;
+  border-radius: var(--mut-r-xs);
+}
+
+.mut-skel[data-shape="circle"] {
+  width: var(--mut-skel-h);
+  border-radius: 50%;
+}
+
+.mut-skel[data-shape="rect"] {
+  border-radius: var(--mut-r-sm);
+}
+
+/* sizes for text lines */
+.mut-skel[data-size="sm"] {
+  height: 12px;
+}
+.mut-skel[data-size="lg"] {
+  height: 20px;
+}
+
+@keyframes mut-skel-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-skel {
+    animation: none;
+    opacity: 0.7;
+  }
+}

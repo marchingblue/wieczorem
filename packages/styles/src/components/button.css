@@ -1,0 +1,144 @@
+/**
+ * mut button — a key that compresses and springs back.
+ * opaque surface: the dot-grid backdrop of the host app must never show
+ * through a control. reads tokens: --mut-btn-*.
+ *
+ * variants: (default) | is-mut-primary | is-mut-ghost | is-mut-danger
+ * sizes:    sm | (default) | lg
+ * shape:    square | pill | icon (square, equal padding all around)
+ */
+
+.mut-btn {
+  /* component vars (smart rounding: scales with size) */
+  --mut-btn-radius: var(--mut-r-sm);
+  --mut-btn-bg: var(--mut-bg);
+  --mut-btn-ink: var(--mut-ink);
+  --mut-btn-pad-y: 6px;
+  --mut-btn-pad-x: 14px;
+  --mut-btn-shadow: none;
+  --mut-btn-drop: 1px;   /* how far it sinks on press  */
+  --mut-btn-lift: 0.97;  /* how much it compresses     */
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+
+  color: var(--mut-btn-ink);
+  background: var(--mut-btn-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-btn-radius);
+  box-shadow: var(--mut-btn-shadow);
+
+  padding: var(--mut-btn-pad-y) var(--mut-btn-pad-x);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform var(--mut-t-fast) var(--mut-press),
+    box-shadow var(--mut-t-fast) var(--mut-press),
+    background-color var(--mut-t-fast) ease,
+    border-color var(--mut-t-fast) ease;
+}
+
+.mut-btn:hover {
+  background: color-mix(in srgb, var(--mut-btn-bg) 92%, var(--mut-ink));
+}
+
+.mut-btn:active {
+  /* press: compress and sink — quick, no bounce on the way down */
+  transform: scale(var(--mut-btn-lift)) translateY(var(--mut-btn-drop));
+  box-shadow: none;
+}
+
+.mut-btn:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 2px;
+}
+
+/* release: the browser applies :active removal with --mut-spring,
+   so the key rises back with a hint of overshoot. */
+
+.mut-btn:disabled,
+.mut-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  color: var(--mut-ink-faint);
+  background: var(--mut-btn-bg);
+  border-color: var(--mut-line-soft);
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---- variants ---- */
+
+.mut-btn.is-mut-primary {
+  --mut-btn-bg: var(--mut-ink);
+  --mut-btn-ink: var(--mut-bg);
+  border-color: transparent;
+}
+.mut-btn.is-mut-primary:hover {
+  background: color-mix(in srgb, var(--mut-ink) 88%, var(--mut-bg));
+}
+
+.mut-btn.is-mut-ghost {
+  border-color: transparent;
+}
+.mut-btn.is-mut-ghost:hover {
+  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+}
+
+/* danger is the one loud voice: solid, so it reads as final */
+.mut-btn.is-mut-danger {
+  --mut-btn-bg: var(--mut-danger);
+  --mut-btn-ink: var(--mut-bg);
+  border-color: transparent;
+}
+.mut-btn.is-mut-danger:hover {
+  background: color-mix(in srgb, var(--mut-danger) 88%, var(--mut-bg));
+}
+
+/* ---- sizes (smart rounding: bigger = rounder) ---- */
+
+.mut-btn[data-size="sm"] {
+  --mut-btn-pad-y: 4px;
+  --mut-btn-pad-x: 10px;
+  --mut-btn-radius: var(--mut-r-xs);
+  font-size: 12px;
+}
+
+.mut-btn[data-size="lg"] {
+  --mut-btn-pad-y: 9px;
+  --mut-btn-pad-x: 20px;
+  --mut-btn-radius: var(--mut-r-md);
+  font-size: 14px;
+}
+
+/* ---- shapes ---- */
+
+/* pill for capsules and badges */
+.mut-btn[data-shape="pill"] {
+  --mut-btn-radius: var(--mut-r-full);
+}
+
+/* icon button: same padding all over, square-ish */
+.mut-btn[data-shape="icon"] {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+.mut-btn[data-shape="icon"][data-size="sm"] {
+  width: 26px;
+  height: 26px;
+}
+.mut-btn[data-shape="icon"][data-size="lg"] {
+  width: 36px;
+  height: 36px;
+}

@@ -1,0 +1,123 @@
+/**
+ * mut menu — the shared panel under dropdowns and selects.
+ * arrival is a fast 4px rise with a plain ease-out: no scale, no overshoot
+ * (springs are for release, not arrival — a popping panel reads as a flash).
+ * items are quiet rows; the selected row carries a small square dot at the
+ * end of the row.
+ */
+
+.mut-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  min-width: 180px;
+  max-height: 280px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 4px;
+
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-r-sm);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
+
+  transform-origin: top;
+  animation: mut-rise-in var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-menu[data-align="right"] {
+  left: auto;
+  right: 0;
+}
+
+.mut-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  text-align: left;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-menu__item:hover,
+.mut-menu__item[data-active="true"] {
+  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+  color: var(--mut-ink);
+}
+
+.mut-menu__item:active {
+  transform: translateY(0.5px);
+}
+
+.mut-menu__item:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: -2px;
+}
+
+.mut-menu__item:disabled {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+}
+
+.mut-menu__item.is-mut-danger {
+  color: var(--mut-danger);
+}
+
+/* the chosen row answers with a small square dot at the end */
+.mut-menu__item[aria-selected="true"] {
+  color: var(--mut-ink);
+}
+.mut-menu__item[aria-selected="true"]::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  flex: none;
+  margin-left: auto;
+  border-radius: 1.5px;
+  background: var(--mut-ink);
+}
+
+.mut-menu__sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--mut-line-soft);
+}
+
+.mut-menu__label {
+  padding: 6px 10px 4px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut-ink-faint);
+  user-select: none;
+}
+
+/* the trigger chevron — always drawn, rotates while open.
+   works for any root that carries data-open (dropdown, select). */
+.mut-chevron {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: currentColor;
+  transform-origin: center;
+  transition: transform var(--mut-t-med) var(--mut-spring);
+}
+
+[data-open="true"] .mut-chevron {
+  transform: rotate(180deg);
+}
