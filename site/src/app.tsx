@@ -165,7 +165,7 @@ export default function App() {
           wieczorem <span>— calm components</span>
         </div>
         <div className="masthead-right">
-          <span className="ver">0.1.0</span>
+          <span className="ver">0.2.0</span>
           <ToggleButton pressed={dark} onPressedChange={setDark} size="sm">
             {dark ? "dark" : "light"}
           </ToggleButton>

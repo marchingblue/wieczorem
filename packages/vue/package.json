@@ -1,6 +1,6 @@
 {
   "name": "@wieczorem/vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "wieczorem for vue — placeholder, api mirrors @wieczorem/react 1:1",
   "license": "MIT",
   "type": "module",

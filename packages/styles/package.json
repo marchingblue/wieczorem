@@ -1,6 +1,6 @@
 {
   "name": "@wieczorem/styles",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "wieczorem design tokens and component styles",
   "license": "MIT",
   "type": "module",
@@ -9,7 +9,9 @@
     "./tokens.css": "./dist/tokens.css",
     "./components/*": "./dist/components/*.css"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "node ./scripts/build.mjs",
     "typecheck": "echo 'styles: nothing to typecheck'",

@@ -9,9 +9,9 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // dev against source — no package build needed while iterating
-      "@mut/react": r("../packages/react/src/index.ts"),
-      "@mut/styles": r("../packages/styles/src/index.css"),
+      // dev and build against source — no package build needed while iterating
+      "@wieczorem/react": r("../packages/react/src/index.ts"),
+      "@wieczorem/styles": r("../packages/styles/src/index.css"),
     },
   },
 });

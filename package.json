@@ -1,7 +1,7 @@
 {
   "name": "wieczorem",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "wieczorem — calm ui components for react (vue next)",
   "license": "MIT",
   "packageManager": "pnpm@11.8.0",
