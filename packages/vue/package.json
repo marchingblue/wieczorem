@@ -1,7 +1,7 @@
 {
-  "name": "@mut/vue",
+  "name": "@wieczorem/vue",
   "version": "0.1.0",
-  "description": "mut/ui for vue — placeholder, api mirrors @mut/react 1:1",
+  "description": "wieczorem for vue — placeholder, api mirrors @wieczorem/react 1:1",
   "license": "MIT",
   "type": "module",
   "scripts": {

@@ -1,7 +1,7 @@
 {
-  "name": "@mut/styles",
+  "name": "@wieczorem/styles",
   "version": "0.1.0",
-  "description": "mut/ui design tokens and component styles",
+  "description": "wieczorem design tokens and component styles",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -12,6 +12,7 @@
   "files": ["dist"],
   "scripts": {
     "build": "node ./scripts/build.mjs",
-    "typecheck": "echo 'styles: nothing to typecheck'"
+    "typecheck": "echo 'styles: nothing to typecheck'",
+    "prepublishOnly": "pnpm build"
   }
 }

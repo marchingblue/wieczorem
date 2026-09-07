@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import type { DropdownItem } from "./Dropdown.js";
+import { useExit } from "./useExit.js";
 
 export interface ContextMenuProps {
   /** the zone that answers to right-click */
@@ -26,6 +27,8 @@ export function ContextMenu({
 }: ContextMenuProps) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  // show lingers through the exit animation; closing flags it for css.
+  const [show, closing] = useExit(open);
   const zoneRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -70,11 +73,12 @@ export function ContextMenu({
       onContextMenu={handleContextMenu}
     >
       {children}
-      {open ? (
+      {show ? (
         <div
           ref={menuRef}
           role="menu"
           className="mut-menu"
+          data-closing={closing || undefined}
           style={{
             position: "fixed",
             top: pos.y,

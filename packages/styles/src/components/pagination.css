@@ -1,0 +1,72 @@
+/**
+ * mut pagination — quiet page stepping. the current page stays sunken,
+ * gaps collapse to an ellipsis. reads --mut-page-*.
+ */
+
+.mut-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--mut-font);
+}
+
+.mut-page__item {
+  display: contents;
+}
+
+.mut-page__btn {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+
+.mut-page__btn:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+
+.mut-page__btn:active {
+  transform: translateY(0.5px);
+}
+
+.mut-page__btn[aria-current="page"] {
+  background: color-mix(in srgb, var(--mut-ink) 10%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+
+.mut-page__btn:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: 1px;
+}
+
+.mut-page__btn:disabled {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.mut-page__gap {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--mut-ink-faint);
+  user-select: none;
+}

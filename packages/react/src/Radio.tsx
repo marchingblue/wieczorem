@@ -15,6 +15,8 @@ export interface RadioProps
   name?: string;
   onChange?: (value: string | undefined) => void;
   label?: ReactNode;
+  /** quiet line under the label */
+  description?: ReactNode;
   disabled?: boolean;
 }
 
@@ -30,6 +32,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       name,
       onChange,
       label,
+      description,
       disabled,
       className,
       ...rest
@@ -59,7 +62,16 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         <span className="mut-radio__circle" aria-hidden="true">
           <span className="mut-radio__dot" aria-hidden="true" />
         </span>
-        {label != null ? <span className="mut-radio__label">{label}</span> : null}
+        {label != null || description != null ? (
+          <span className="mut-radio__body">
+            {label != null ? (
+              <span className="mut-radio__label">{label}</span>
+            ) : null}
+            {description != null ? (
+              <span className="mut-radio__desc">{description}</span>
+            ) : null}
+          </span>
+        ) : null}
       </label>
     );
   },
@@ -68,6 +80,8 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 export interface RadioItem {
   value: string;
   label: ReactNode;
+  /** quiet line under the label */
+  description?: ReactNode;
   disabled?: boolean;
 }
 
@@ -80,6 +94,10 @@ export interface RadioGroupProps {
   defaultValue?: string;
   onChange?: (value: string) => void;
   name?: string;
+  /** row (default) or stacked */
+  orientation?: "horizontal" | "vertical";
+  /** plain radios or bordered choice cards */
+  variant?: "plain" | "card";
   disabled?: boolean;
   "aria-label"?: string;
   className?: string;
@@ -96,6 +114,8 @@ export function RadioGroup({
   defaultValue,
   onChange,
   name,
+  orientation = "horizontal",
+  variant = "plain",
   disabled,
   className,
   ...rest
@@ -106,9 +126,10 @@ export function RadioGroup({
   return (
     <div
       role="radiogroup"
-      className={className}
+      className={["mut-radio-group", className].filter(Boolean).join(" ")}
+      data-orientation={orientation}
+      data-variant={variant}
       aria-label={rest["aria-label"]}
-      style={{ display: "inline-flex", gap: 14, flexWrap: "wrap" }}
     >
       {items.map((it) => (
         <Radio
@@ -116,6 +137,7 @@ export function RadioGroup({
           value={it.value}
           name={name}
           label={it.label}
+          description={it.description}
           disabled={disabled ?? it.disabled}
           checked={current === it.value}
           onChange={(v) => {

@@ -48,10 +48,12 @@
   }
 }
 
+/* the exit travels further and swells a touch — dismissed toward you,
+   not dropped through the floor. */
 @keyframes mut-cmd-out {
   to {
     opacity: 0;
-    transform: translateY(6px) scale(0.99);
+    transform: translateY(12px) scale(1.01);
   }
 }
 

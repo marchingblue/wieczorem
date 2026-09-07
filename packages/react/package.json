@@ -1,7 +1,7 @@
 {
-  "name": "@mut/react",
+  "name": "@wieczorem/react",
   "version": "0.1.0",
-  "description": "mut/ui for react — calm, natural components",
+  "description": "wieczorem for react — calm, natural components",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -19,13 +19,15 @@
   ],
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
-    "react": ">=18"
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
-    "@mut/styles": "workspace:*",
+    "@wieczorem/styles": "workspace:*",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.2.7",
     "react": "^19.1.0",

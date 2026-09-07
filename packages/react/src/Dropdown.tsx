@@ -1,4 +1,6 @@
 import {
+  createContext,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -6,6 +8,7 @@ import {
 } from "react";
 import { Button, type ButtonProps } from "./Button.js";
 import { ChevronDownIcon } from "./icons.js";
+import { useExit } from "./useExit.js";
 
 export interface DropdownItem {
   label: ReactNode;
@@ -70,6 +73,10 @@ export function Dropdown({
   );
 }
 
+/** true while the menu plays its exit animation — DropdownMenu reads it
+ * so open and close mirror each other. */
+const DropdownClosing = createContext(false);
+
 /** owns the open state; children receive it as a render prop */
 export function DropdownRoot({
   align = "left",
@@ -81,6 +88,8 @@ export function DropdownRoot({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  // show lingers through the exit animation; closing flags it for css.
+  const [show, closing] = useExit(open);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -103,11 +112,15 @@ export function DropdownRoot({
     <div
       ref={rootRef}
       className={["mut-dd", className].filter(Boolean).join(" ")}
+      // open, not show: the chevron answers the instant the menu starts
+      // leaving, while the panel finishes its exit underneath.
       data-open={open}
       data-align={align}
       onClick={() => setOpen((o) => !o)}
     >
-      {children(open)}
+      <DropdownClosing.Provider value={closing}>
+        {children(show)}
+      </DropdownClosing.Provider>
     </div>
   );
 }
@@ -135,8 +148,14 @@ export function DropdownMenu({
   label?: string;
   children: ReactNode;
 }) {
+  const closing = useContext(DropdownClosing);
   return (
-    <div className="mut-menu" role="menu" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="mut-menu"
+      role="menu"
+      data-closing={closing || undefined}
+      onClick={(e) => e.stopPropagation()}
+    >
       {label ? (
         <div className="mut-menu__label" role="presentation">
           {label}

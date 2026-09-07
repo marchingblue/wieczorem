@@ -193,3 +193,80 @@
   color: var(--mut-ink-faint);
   user-select: none;
 }
+
+/* ---- end tools: optional chevron + clear, floating over the input ---- */
+.mut-combo__wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.mut-combo__tools {
+  position: absolute;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* the input yields room by tool count */
+.mut-combo__wrap:has(.mut-combo__tools[data-n="1"]) .mut-combo__input {
+  padding-right: 30px;
+}
+.mut-combo__wrap:has(.mut-combo__tools[data-n="2"]) .mut-combo__input {
+  padding-right: 52px;
+}
+
+/* the multi titlebar carries its tools in flow */
+.mut-combo__bar > .mut-combo__tools {
+  position: static;
+  margin-left: auto;
+}
+
+.mut-combo__tool {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  transition: color var(--mut-t-fast) ease;
+}
+.mut-combo__tool:hover {
+  color: var(--mut-ink);
+}
+.mut-combo__tool:disabled {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+}
+/* the clear button answers with color only — no spin, it is not a state */
+.mut-combo__clear {
+  transition: color var(--mut-t-fast) ease;
+}
+
+/* group headers (regions, continents, …) */
+.mut-combo__group {
+  padding: 8px 10px 2px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut-ink-muted);
+  user-select: none;
+}
+
+.mut-combo__chev {
+  transition: transform var(--mut-t-med) var(--mut-spring);
+}
+.mut-combo[data-open="true"] .mut-combo__chev {
+  transform: rotate(180deg);
+}
+
+/* exit mirrors the entrance — useExit keeps the list mounted with
+   data-closing until the fall finishes. */
+.mut-combo__list[data-closing="true"] {
+  animation: mut-rise-out var(--mut-t-fast) var(--mut-press) both;
+}

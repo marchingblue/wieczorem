@@ -10,7 +10,7 @@ import { CheckIcon } from "./icons.js";
 
 export interface DropzoneProps {
   /** outline flavor (default dashed) */
-  style?: "dashed" | "dotted" | "solid";
+  style?: "dashed" | "solid";
   /** accepted file types, like a native input */
   accept?: string;
   /** allow selecting multiple files */
@@ -18,6 +18,8 @@ export interface DropzoneProps {
   /** short line under the main label */
   hint?: string;
   label?: string;
+  /** shown when files land (default the drawing check) */
+  successIcon?: React.ReactNode;
   disabled?: boolean;
   onFiles?: (files: File[]) => void;
   className?: string;
@@ -25,7 +27,7 @@ export interface DropzoneProps {
 
 /**
  * a quiet invitation: hairline outline, a corner trace while something
- * hovers over it, and a check that draws in when files land.
+ * hovers over it, and a success mark that pops in when files land.
  * click to browse or drop straight onto it.
  */
 export function Dropzone({
@@ -34,6 +36,7 @@ export function Dropzone({
   multiple = false,
   hint,
   label = "drop files or click to browse",
+  successIcon,
   disabled,
   onFiles,
   className,
@@ -117,7 +120,9 @@ export function Dropzone({
         }}
       />
       {dropped ? (
-        <CheckIcon size={16} />
+        <span key="success" className="mut-drop__success">
+          {successIcon ?? <CheckIcon size={16} />}
+        </span>
       ) : (
         <span className="mut-drop__label">{label}</span>
       )}

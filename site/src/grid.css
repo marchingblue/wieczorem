@@ -64,7 +64,7 @@ body {
 .sec-label {
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: var(--mut-ink-faint);
+  color: var(--mut-ink-muted);
   margin-bottom: 16px;
 }
 
@@ -111,7 +111,7 @@ body {
   padding: 6px 10px;
   border: 1px solid var(--mut-line-soft);
   border-radius: var(--mut-r-sm);
-  background: color-mix(in srgb, var(--mut-surface) 72%, transparent);
+  background: color-mix(in srgb, var(--mut-surface) 72%, var(--mut-bg));
 }
 
 /* drawer demo helpers */
@@ -134,10 +134,10 @@ body {
   width: 280px;
   height: 110px;
   font-size: 12px;
-  color: var(--mut-ink-faint);
+  color: var(--mut-ink-muted);
   border: 1px dashed var(--mut-line);
   border-radius: var(--mut-r-sm);
-  background: color-mix(in srgb, var(--mut-bg) 60%, transparent);
+  background: var(--mut-bg);
 }
 
 /* command menu hint */
@@ -145,8 +145,8 @@ body {
   font-family: var(--mut-font);
   font-size: 11px;
   padding: 3px 7px;
-  color: var(--mut-ink-faint);
-  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+  color: var(--mut-ink-muted);
+  background: color-mix(in srgb, var(--mut-ink) 6%, var(--mut-bg));
   border-radius: var(--mut-r-xs);
 }
 
@@ -175,7 +175,7 @@ body {
   padding: 16px 18px;
   border: 1px solid var(--mut-line-soft);
   border-radius: var(--mut-r-md);
-  background: color-mix(in srgb, var(--mut-surface) 72%, transparent);
+  background: color-mix(in srgb, var(--mut-surface) 72%, var(--mut-bg));
   font-size: 12px;
   color: var(--mut-ink-muted);
 }

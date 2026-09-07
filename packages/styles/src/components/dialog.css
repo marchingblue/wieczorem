@@ -21,6 +21,11 @@
   animation: mut-fade-out var(--mut-t-fast) ease both;
 }
 
+.mut-dialog-overlay[data-blur="true"] {
+  backdrop-filter: blur(var(--mut-dialog-blur, 4px));
+  -webkit-backdrop-filter: blur(var(--mut-dialog-blur, 4px));
+}
+
 .mut-dialog {
   --mut-dialog-radius: var(--mut-r-md);
 

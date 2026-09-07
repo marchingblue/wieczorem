@@ -3,6 +3,34 @@
  * the width animates so updates glide. reads --mut-progress-*.
  */
 
+.mut-progress-wrap {
+  width: 100%;
+  max-width: 240px;
+  font-family: var(--mut-font);
+}
+
+/* titlebar: label left, value hugging the right end */
+.mut-progress__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.2;
+}
+.mut-progress__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--mut-ink);
+}
+.mut-progress__value {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--mut-ink);
+}
+
 .mut-progress {
   --mut-progress-h: 6px;
 
@@ -14,7 +42,7 @@
   box-sizing: border-box;
   overflow: hidden;
 
-  background: color-mix(in srgb, var(--mut-ink) 12%, transparent);
+  background: color-mix(in srgb, var(--mut-ink) 12%, var(--mut-bg));
   border-radius: var(--mut-r-full);
 }
 
@@ -26,18 +54,25 @@
   transition: width var(--mut-t-med) var(--mut-press);
 }
 
-/* indeterminate: a bar patrols, nothing is claimed */
+/* indeterminate: a bar patrols end to end, nothing is claimed.
+   linear travel so it never pulses — but the bar itself breathes,
+   stretching mid-rail and relaxing at the edges. a little
+   unpredictable, the way waiting feels. the rail clips both ends. */
 .mut-progress[data-indeterminate="true"] .mut-progress__fill {
-  width: 36%;
-  animation: mut-progress-patrol 1.4s ease-in-out infinite;
+  animation: mut-progress-patrol 1.6s linear infinite;
 }
 
 @keyframes mut-progress-patrol {
-  from {
+  0% {
+    width: 30%;
     transform: translateX(-110%);
   }
-  to {
-    transform: translateX(290%);
+  45% {
+    width: 52%;
+  }
+  100% {
+    width: 30%;
+    transform: translateX(350%);
   }
 }
 

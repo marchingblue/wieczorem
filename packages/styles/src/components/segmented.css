@@ -7,9 +7,10 @@
 
 .mut-seg {
   --mut-seg-radius: var(--mut-r-sm);
-  --mut-seg-bg: color-mix(in srgb, var(--mut-ink) 8%, transparent);
-  --mut-seg-highlight: var(--mut-bg);
-  --mut-seg-opt: var(--mut-bg);
+  /* opaque: mixed against --mut-bg (not transparent) so page backdrops
+     like the site dot grid never bleed through the rail. */
+  --mut-seg-bg: color-mix(in srgb, var(--mut-ink) 8%, var(--mut-bg));
+  --mut-seg-highlight: var(--mut-elevated);
   --mut-seg-ring: var(--mut-ring);
 
   position: relative;
@@ -64,7 +65,7 @@
 
   padding: 5px 12px;
   border: none;
-  background: var(--mut-seg-opt);
+  background: transparent;
   border-radius: var(--mut-seg-radius);
 
   font-family: var(--mut-font);
@@ -104,7 +105,7 @@
 
 /* dark mode: rail needs more contrast against the page */
 [data-theme="dark"] .mut-seg {
-  --mut-seg-bg: color-mix(in srgb, var(--mut-ink) 14%, transparent);
+  --mut-seg-bg: color-mix(in srgb, var(--mut-ink) 14%, var(--mut-bg));
 }
 [data-theme="dark"] .mut-seg__opt {
   color: var(--mut-g6);

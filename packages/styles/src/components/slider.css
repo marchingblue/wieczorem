@@ -1,11 +1,16 @@
 /**
- * mut slider — a fader. the thumb is a rounded square with a circular dot
- * in the middle. ink fill on the rail, optional step ruler beneath.
- * single value and range both live here. reads --mut-slider-*.
+ * mut slider — a fader. the thumb is a bright square with a small dark
+ * rounded-square mark in the middle. ink fill on the rail, optional step
+ * ruler beneath. single value and range both live here. reads
+ * --mut-slider-*. the thumb never animates — it follows the pointer.
  */
 
 .mut-slider {
   --mut-slider-h: 24px;
+  --mut-slider-thumb-border: var(--mut-line);
+  /* bright thumb, dark mark — reads in both themes, like a switch knob */
+  --mut-slider-thumb: var(--mut-elevated);
+  --mut-slider-mark: var(--mut-ink);
 
   position: relative;
   display: inline-flex;
@@ -25,7 +30,8 @@
   width: 100%;
   height: 3px;
   border-radius: 2px;
-  background: color-mix(in srgb, var(--mut-ink) 16%, transparent);
+  /* opaque: mixed against --mut-bg so page backdrops never show through */
+  background: color-mix(in srgb, var(--mut-ink) 16%, var(--mut-bg));
 }
 
 .mut-slider__fill {
@@ -35,7 +41,7 @@
   background: var(--mut-ink);
 }
 
-/* the thumb: a rounded square with a circular dot */
+/* the thumb: an ink square with a small rounded-square mark */
 .mut-slider__thumb {
   position: absolute;
   top: 50%;
@@ -45,8 +51,8 @@
   display: grid;
   place-items: center;
 
-  background: var(--mut-bg); /* opaque: never let a page backdrop bleed through */
-  border: 1px solid var(--mut-ink);
+  background: var(--mut-slider-thumb);
+  border: 1px solid var(--mut-slider-thumb-border);
   border-radius: 3px;
   cursor: grab;
 
@@ -56,10 +62,10 @@
 
 .mut-slider__thumb::after {
   content: "";
-  width: 4px;
-  height: 4px;
-  border-radius: 50%; /* circular dot */
-  background: var(--mut-ink);
+  width: 5px;
+  height: 5px;
+  border-radius: 1.5px; /* small rounded square, never a circle */
+  background: var(--mut-slider-mark);
 }
 
 .mut-slider__thumb:active {
@@ -76,8 +82,6 @@
   transition: none;
   scale: 1.08;
 }
-
-/* the step ruler: small marks under the rail at each allowed value */
 .mut-slider__steps {
   position: absolute;
   left: 0;

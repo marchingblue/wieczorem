@@ -1,0 +1,82 @@
+/**
+ * mut collapsible — a quiet disclosure. the trigger row toggles, the
+ * panel unfolds with the grid-rows glide: no js measuring, no layout
+ * jump. the chevron answers instantly, like the menus.
+ */
+
+.mut-collapse {
+  width: 100%;
+  font-family: var(--mut-font);
+}
+
+.mut-collapse__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease;
+}
+.mut-collapse__trigger:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+.mut-collapse__trigger:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: -2px;
+}
+.mut-collapse__trigger:disabled {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+}
+
+.mut-collapse__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* the unfold: grid rows glide, the inner clips */
+.mut-collapse__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--mut-t-med) var(--mut-press);
+}
+.mut-collapse[data-open="true"] .mut-collapse__panel {
+  grid-template-rows: 1fr;
+}
+.mut-collapse__inner {
+  overflow: hidden;
+  min-height: 0;
+  visibility: hidden;
+  transition: visibility 0s linear var(--mut-t-med);
+}
+.mut-collapse[data-open="true"] .mut-collapse__inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-collapse__panel,
+  .mut-collapse__inner {
+    transition: none;
+  }
+  .mut-collapse__inner {
+    visibility: visible;
+  }
+}

@@ -1,0 +1,68 @@
+/**
+ * mut tooltip — a quiet one-liner on hover or focus. ink chip, paper
+ * text, no arrow. arrives with the shared rise, never a spring.
+ * sides: top (default) | bottom | left | right.
+ */
+
+.mut-tip {
+  position: relative;
+  display: inline-flex;
+}
+
+.mut-tip__bubble {
+  position: absolute;
+  z-index: 50;
+  max-width: 220px;
+  box-sizing: border-box;
+  padding: 5px 9px;
+
+  background: var(--mut-ink);
+  color: var(--mut-bg);
+  border-radius: var(--mut-r-xs);
+
+  font-family: var(--mut-font);
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: normal;
+  pointer-events: none;
+
+  animation: mut-rise-in var(--mut-t-fast) var(--mut-press) both;
+}
+
+.mut-tip__bubble[data-side="top"] {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mut-tip__bubble[data-side="bottom"] {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mut-tip__bubble[data-side="left"] {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.mut-tip__bubble[data-side="right"] {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* the rise reads along the approach axis */
+.mut-tip__bubble[data-side="bottom"] {
+  animation-name: mut-tip-drop-in;
+}
+@keyframes mut-tip-drop-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-tip__bubble {
+    animation: mut-fade-in var(--mut-t-fast) ease both;
+  }
+}

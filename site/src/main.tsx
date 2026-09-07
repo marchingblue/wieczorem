@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@mut/styles";
+import "@wieczorem/styles";
 import "./grid.css";
 import App from "./app.js";
 

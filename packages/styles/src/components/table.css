@@ -1,0 +1,59 @@
+/**
+ * mut table — quiet primitives. hairline header, softer row rules,
+ * hover wash, sunken selected rows. numeric columns align right with
+ * tabular figures.
+ */
+
+.mut-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.mut-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mut-font);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mut-ink);
+}
+
+.mut-table th.mut-table__cell {
+  padding: 6px 12px 8px;
+  border-bottom: 1px solid var(--mut-line);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--mut-ink-muted);
+  user-select: none;
+}
+
+.mut-table td.mut-table__cell {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--mut-line-soft);
+  text-align: left;
+  vertical-align: baseline;
+  overflow-wrap: anywhere;
+}
+
+.mut-table tbody tr:last-child td.mut-table__cell {
+  border-bottom: none;
+}
+
+.mut-table tbody tr {
+  transition: background-color var(--mut-t-fast) ease;
+}
+.mut-table tbody tr:hover {
+  background: color-mix(in srgb, var(--mut-ink) 3%, transparent);
+}
+.mut-table tbody tr[data-selected="true"] {
+  background: color-mix(in srgb, var(--mut-ink) 6%, var(--mut-bg));
+}
+
+.mut-table__cell[data-numeric="true"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

@@ -195,10 +195,11 @@ export function Slider({
       <div
         className="mut-slider__fill"
         style={{
-          left: `${pct(thumbs[0]?.v ?? min)}%`,
+          // single sliders fill from the minimum; ranges fill lo…hi
+          left: `${isRange ? pct(thumbs[0]?.v ?? min) : pct(min)}%`,
           width: `${
             pct(thumbs[thumbs.length - 1]?.v ?? min) -
-            pct(thumbs[0]?.v ?? min)
+            (isRange ? pct(thumbs[0]?.v ?? min) : pct(min))
           }%`,
         }}
       />

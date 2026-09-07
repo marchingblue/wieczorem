@@ -97,3 +97,93 @@ export function CopyIcon({ size = 14, ...rest }: IconProps) {
     </svg>
   );
 }
+
+/** sidebar collapser — a panel with a chevron. css flips it 180° when the
+ * rail is collapsed so it always points the way the panel will go. */
+export function PanelCollapseIcon({ size = 15, ...rest }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      {...rest}
+    >
+      <rect
+        x="1.5"
+        y="1.5"
+        width="13"
+        height="13"
+        rx="3.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <line
+        x1="6"
+        y1="1.5"
+        x2="6"
+        y2="14.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M10 6 L8.2 8 L10 10"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** calendar — the date input affordance */
+export function CalendarIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      {...rest}
+    >
+      <rect
+        x="2"
+        y="3"
+        width="12"
+        height="11"
+        rx="3"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="2"
+        y1="6.5"
+        x2="14"
+        y2="6.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="5.5"
+        y1="1.5"
+        x2="5.5"
+        y2="4"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      <line
+        x1="10.5"
+        y1="1.5"
+        x2="10.5"
+        y2="4"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

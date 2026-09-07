@@ -15,6 +15,8 @@ export interface ModalProps {
   children?: ReactNode;
   /** panel width, number = px (default 420) */
   width?: number | string;
+  /** frost the overlay — true for the default 4px, number for px */
+  blur?: boolean | number;
   onOpenChange?: (open: boolean) => void;
   className?: string;
   style?: CSSProperties;
@@ -30,6 +32,7 @@ export function Modal({
   title,
   children,
   width,
+  blur = false,
   onOpenChange,
   className,
   style,
@@ -79,6 +82,12 @@ export function Modal({
       className="mut-dialog-overlay"
       role="presentation"
       data-closing={closing || undefined}
+      data-blur={blur ? "true" : undefined}
+      style={
+        typeof blur === "number"
+          ? ({ "--mut-dialog-blur": `${blur}px` }) as CSSProperties
+          : style
+      }
       onMouseDown={onOverlayMouseDown}
     >
       <div

@@ -1,11 +1,15 @@
 /**
- * mut dropzone — a quiet invitation. hairline outline (solid | dashed |
- * dotted), a corner-to-corner trace on dragover, and a check that draws
- * in when files land. reads --mut-drop-*.
+ * mut dropzone — a quiet invitation. hairline outline (solid | dashed),
+ * a corner-to-corner trace on dragover, and a success mark that pops in
+ * when files land (override --mut-drop-success-animation for your own).
+ * reads --mut-drop-*.
  */
 
 .mut-drop {
   --mut-drop-style: dashed;
+  /* custom upload celebration — any css animation, runs when files land */
+  --mut-drop-success-animation: mut-drop-pop var(--mut-t-med)
+    var(--mut-spring) both;
 
   position: relative;
   display: flex;
@@ -21,7 +25,8 @@
   font-family: var(--mut-font);
   font-size: 13px;
   color: var(--mut-ink-muted);
-  background: color-mix(in srgb, var(--mut-bg) 60%, transparent);
+  /* opaque resting surface — page backdrops never bleed through */
+  background: var(--mut-bg);
   outline: 1.5px solid var(--mut-line);
   outline-offset: -1.5px;
   border-radius: var(--mut-r-sm);
@@ -36,14 +41,10 @@
 
 /* outline styles */
 .mut-drop[data-style="dashed"] { --mut-drop-style: dashed; }
-.mut-drop[data-style="dotted"] { --mut-drop-style: dotted; }
 .mut-drop[data-style="solid"]  { --mut-drop-style: solid; }
 
 .mut-drop[data-style="dashed"] {
   outline-style: dashed;
-}
-.mut-drop[data-style="dotted"] {
-  outline-style: dotted;
 }
 .mut-drop[data-style="solid"] {
   outline-style: solid;
@@ -51,13 +52,13 @@
 
 .mut-drop:hover {
   outline-color: var(--mut-ink-muted);
-  background: color-mix(in srgb, var(--mut-ink) 3%, transparent);
+  background: color-mix(in srgb, var(--mut-ink) 3%, var(--mut-bg));
 }
 
 /* dragover: the border wakes and the trace runs the corners */
 .mut-drop[data-over="true"] {
   outline-color: var(--mut-ink);
-  background: color-mix(in srgb, var(--mut-ink) 5%, transparent);
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
 }
 
 .mut-drop[data-over="true"]::after {
@@ -98,4 +99,27 @@
 
 .mut-drop.is-mut-dropped {
   color: var(--mut-ink);
+}
+
+/* the success mark — pops in when files land. point
+   --mut-drop-success-animation at your own keyframes to celebrate
+   differently. */
+.mut-drop__success {
+  display: inline-grid;
+  place-items: center;
+  color: var(--mut-ink);
+  animation: var(--mut-drop-success-animation);
+}
+
+@keyframes mut-drop-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-drop__success {
+    animation: mut-fade-in var(--mut-t-fast) ease both;
+  }
 }

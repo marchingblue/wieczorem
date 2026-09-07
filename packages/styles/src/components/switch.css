@@ -11,8 +11,9 @@
   --mut-switch-pad: 2.5px;
   --mut-switch-radius: 5px;        /* outer: deliberately less rounded */
   --mut-switch-knob-radius: 6px;   /* inner: the rounder of the two    */
+  --mut-switch-stretch: 3px;       /* how much the knob elongates mid-press */
   --mut-switch-off: color-mix(in srgb, var(--mut-ink) 14%, var(--mut-bg));
-  --mut-switch-on: var(--mut-ink);
+  --mut-switch-on: color-mix(in srgb, var(--mut-ink) 90%, var(--mut-bg));
   --mut-switch-knob: var(--mut-elevated);
   --mut-switch-knob-on: var(--mut-bg);
 
@@ -50,17 +51,26 @@
   background: var(--mut-switch-knob);
 
   transform: translateX(0);
-  transition: transform var(--mut-t-med) var(--mut-spring);
+  transition:
+    transform var(--mut-t-med) var(--mut-spring),
+    width var(--mut-t-fast) var(--mut-press);
 }
 
 .mut-switch:hover {
   background: color-mix(in srgb, var(--mut-ink) 20%, var(--mut-bg));
 }
 
-/* press: a quick nudge toward where it's about to go */
+/* press: the knob nudges and elongates toward its travel — iphone-style.
+   release springs it across while it relaxes back to round. */
 .mut-switch:active::before {
+  width: calc(
+    var(--mut-switch-h) - var(--mut-switch-pad) * 2 +
+      var(--mut-switch-stretch)
+  );
   transform: translateX(2px);
-  transition: transform var(--mut-t-fast) var(--mut-press);
+  transition:
+    transform var(--mut-t-fast) var(--mut-press),
+    width var(--mut-t-fast) var(--mut-press);
 }
 
 .mut-switch[data-checked="true"] {
@@ -76,10 +86,19 @@
   transform: translateX(calc(var(--mut-switch-w) - var(--mut-switch-h)));
 }
 .mut-switch[data-checked="true"]:active::before {
-  transform: translateX(
-    calc(var(--mut-switch-w) - var(--mut-switch-h) - 2px)
+  width: calc(
+    var(--mut-switch-h) - var(--mut-switch-pad) * 2 +
+      var(--mut-switch-stretch)
   );
-  transition: transform var(--mut-t-fast) var(--mut-press);
+  transform: translateX(
+    calc(
+      var(--mut-switch-w) - var(--mut-switch-h) - 2px -
+        var(--mut-switch-stretch)
+    )
+  );
+  transition:
+    transform var(--mut-t-fast) var(--mut-press),
+    width var(--mut-t-fast) var(--mut-press);
 }
 
 .mut-switch:disabled {

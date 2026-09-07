@@ -92,7 +92,9 @@
   border-color: transparent;
 }
 .mut-btn.is-mut-ghost:hover {
-  background: color-mix(in srgb, var(--mut-ink) 6%, transparent);
+  /* mix against the (opaque) button bg, never transparent — the wash
+     must not let a page backdrop bleed through. */
+  background: color-mix(in srgb, var(--mut-ink) 6%, var(--mut-btn-bg));
 }
 
 /* danger is the one loud voice: solid, so it reads as final */

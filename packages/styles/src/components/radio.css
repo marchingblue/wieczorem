@@ -86,3 +86,58 @@
   cursor: not-allowed;
   opacity: 0.4;
 }
+
+/* ---- group: row by default, stacked on request ---- */
+.mut-radio-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.mut-radio-group[data-orientation="vertical"] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* label + description stack */
+.mut-radio__body {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.mut-radio__desc {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--mut-ink-muted);
+}
+
+/* ---- choice cards: bordered, selectable tiles ---- */
+.mut-radio-group[data-variant="card"] {
+  gap: 8px;
+}
+.mut-radio-group[data-variant="card"] .mut-radio {
+  align-items: flex-start;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-r-sm);
+  transition:
+    border-color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+.mut-radio-group[data-variant="card"] .mut-radio:hover {
+  border-color: var(--mut-ink-muted);
+}
+.mut-radio-group[data-variant="card"] .mut-radio:active {
+  transform: translateY(0.5px);
+}
+.mut-radio-group[data-variant="card"] .mut-radio:has(.mut-radio__input:checked) {
+  border-color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 4%, var(--mut-bg));
+}
+.mut-radio-group[data-variant="card"] .mut-radio__circle {
+  margin-top: 1px;
+}

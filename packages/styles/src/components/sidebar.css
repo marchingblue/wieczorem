@@ -1,32 +1,127 @@
 /**
- * mut sidebar — a widget, not a page column. an inset panel with quiet
- * nav sections; the active item is sunken ink, items press like keys.
+ * mut sidebar — a composable widget, not a page column. provider owns the
+ * collapse state; header/content/groups/menu compose inside; footer pins
+ * to the bottom. icon-collapses to a rail, slides away as offcanvas.
  * reads --mut-side-*.
  */
 
+.mut-side-provider {
+  display: contents;
+}
+
 .mut-side {
   --mut-side-w: 220px;
+  --mut-side-w-collapsed: 52px;
 
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   box-sizing: border-box;
   width: var(--mut-side-w);
   max-width: 100%;
-  padding: 12px;
+  min-height: 0;
 
   background: var(--mut-surface);
   border: 1px solid var(--mut-line);
   border-radius: var(--mut-r-md);
   font-family: var(--mut-font);
+
+  /* collapsing glides — kept at the motion ceiling (220ms) */
+  transition:
+    width var(--mut-t-med) var(--mut-press),
+    padding var(--mut-t-med) var(--mut-press),
+    opacity var(--mut-t-fast) ease,
+    border-width var(--mut-t-fast) ease;
+}
+
+/* variants: floating panel (default) | flush app column | inset card */
+.mut-side[data-variant="floating"] {
+  padding: 12px;
+  gap: 16px;
+}
+.mut-side[data-variant="sidebar"] {
+  border-radius: 0;
+  border-top: none;
+  border-bottom: none;
+  border-inline-start: none;
+  padding: 12px;
+  gap: 16px;
+}
+.mut-side[data-side="right"][data-variant="sidebar"] {
+  border-inline-end: none;
+  border-inline-start: 1px solid var(--mut-line);
+}
+.mut-side[data-side="left"][data-variant="sidebar"] {
+  border-inline-end: 1px solid var(--mut-line);
+}
+.mut-side[data-variant="inset"] {
+  --mut-side-radius: var(--mut-r-lg);
+  margin: 8px;
+  padding: 12px;
+  gap: 16px;
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-r-lg);
+}
+
+/* ---- regions ---- */
+
+.mut-side__header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+}
+
+.mut-side__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.mut-side__footer {
+  flex: none;
+  padding: 8px 8px 0;
+  border-top: 1px solid var(--mut-line-soft);
+  font-size: 12px;
+  color: var(--mut-ink-faint);
+}
+
+.mut-side__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mut-side__group-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  min-height: 20px;
 }
 
 .mut-side__label {
-  padding: 0 8px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--mut-ink-faint);
   user-select: none;
+}
+
+.mut-side__group-action {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
 }
 
 .mut-side__nav {
@@ -35,11 +130,21 @@
   gap: 2px;
 }
 
+.mut-side__row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* ---- menu rows ---- */
+
 .mut-side__item {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
+  min-width: 0;
   box-sizing: border-box;
   padding: 6px 8px;
   border: none;
@@ -49,6 +154,7 @@
   font-family: inherit;
   font-size: 13px;
   text-align: left;
+  white-space: nowrap;
   color: var(--mut-ink-muted);
   text-decoration: none;
   cursor: pointer;
@@ -61,7 +167,7 @@
 }
 
 .mut-side__item:hover {
-  background: color-mix(in srgb, var(--mut-ink) 5%, transparent);
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
   color: var(--mut-ink);
 }
 
@@ -72,7 +178,7 @@
 /* latched: the current item stays sunken */
 .mut-side__item[aria-current="true"],
 .mut-side__item[aria-current="page"] {
-  background: color-mix(in srgb, var(--mut-ink) 10%, transparent);
+  background: color-mix(in srgb, var(--mut-ink) 10%, var(--mut-bg));
   color: var(--mut-ink);
 }
 
@@ -86,13 +192,240 @@
   cursor: not-allowed;
 }
 
+.mut-side__item-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mut-side__badge {
+  display: inline-flex;
+  flex: none;
+  margin-left: auto;
+}
 .mut-side__item .mut-badge {
   margin-left: auto;
 }
 
-.mut-side__footer {
-  padding: 8px 8px 0;
-  border-top: 1px solid var(--mut-line-soft);
-  font-size: 12px;
+.mut-side__action {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
   color: var(--mut-ink-faint);
+  cursor: pointer;
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease;
+}
+.mut-side__action:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+
+/* indented submenu */
+.mut-side__sub {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-inline-start: 12px;
+  padding-inline-start: 8px;
+  border-inline-start: 1px solid var(--mut-line-soft);
+}
+
+/* ---- workspace widget ---- */
+
+.mut-side__workspace-row {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mut-side__workspace {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 4px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+  font-family: inherit;
+  color: var(--mut-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--mut-t-fast) ease;
+}
+
+button.mut-side__workspace:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+}
+
+.mut-side__tile {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--mut-ink) 8%, var(--mut-bg));
+  color: var(--mut-ink);
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.mut-side__name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.mut-side__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+
+/* ---- trigger + rail ---- */
+
+.mut-side__trigger {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease,
+    transform var(--mut-t-fast) var(--mut-press);
+}
+.mut-side__trigger:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+.mut-side__trigger:active {
+  transform: scale(0.92);
+}
+.mut-side__trigger svg {
+  transition: transform var(--mut-t-med) var(--mut-spring);
+}
+/* collapsed: the chevron points back out — the way the panel will go */
+.mut-side-provider[data-state="collapsed"] .mut-side__trigger svg {
+  transform: rotate(180deg);
+}
+
+/* edge strip that toggles */
+.mut-side__rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.mut-side[data-side="left"] .mut-side__rail {
+  right: -6px;
+}
+.mut-side[data-side="right"] .mut-side__rail {
+  left: -6px;
+}
+.mut-side__rail::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color var(--mut-t-fast) ease;
+}
+.mut-side__rail:hover::after {
+  background: var(--mut-line);
+}
+
+/* ---- icon rail: icons only, everything else steps aside ---- */
+
+.mut-side[data-collapsible="icon"][data-state="collapsed"] {
+  width: var(--mut-side-w-collapsed);
+}
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__header,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__content,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__footer {
+  align-items: stretch;
+}
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__name,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__actions,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__label,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__group-action,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__item-label,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__badge,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__action,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__footer,
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__sub {
+  display: none;
+}
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__item {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__workspace {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+.mut-side[data-collapsible="icon"][data-state="collapsed"] .mut-side__row {
+  justify-content: center;
+}
+
+/* ---- offcanvas: slides away entirely ---- */
+
+.mut-side[data-collapsible="offcanvas"][data-state="collapsed"] {
+  width: 0;
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+  opacity: 0;
+  overflow: hidden;
+  border-left-width: 0;
+  border-right-width: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mut-side,
+  .mut-side__trigger svg {
+    transition: none;
+  }
+}
+
+.mut-side__glyph {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  font-size: 12px;
+  text-transform: uppercase;
 }

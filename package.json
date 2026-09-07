@@ -1,8 +1,8 @@
 {
-  "name": "mut-ui",
+  "name": "wieczorem",
   "private": true,
   "version": "0.1.0",
-  "description": "calm, natural ui components for react and vue",
+  "description": "wieczorem — calm ui components for react (vue next)",
   "license": "MIT",
   "packageManager": "pnpm@11.8.0",
   "engines": {

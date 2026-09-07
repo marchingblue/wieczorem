@@ -10,15 +10,15 @@ importers:
 
   packages/react:
     devDependencies:
-      '@mut/styles':
-        specifier: workspace:*
-        version: link:../styles
       '@types/react':
         specifier: ^19.1.0
         version: 19.2.18
       '@types/react-dom':
         specifier: ^19.2.7
         version: 19.2.7(@types/react@19.2.18)
+      '@wieczorem/styles':
+        specifier: workspace:*
+        version: link:../styles
       react:
         specifier: ^19.1.0
         version: 19.2.8
@@ -38,10 +38,10 @@ importers:
 
   site:
     dependencies:
-      '@mut/react':
+      '@wieczorem/react':
         specifier: workspace:*
         version: link:../packages/react
-      '@mut/styles':
+      '@wieczorem/styles':
         specifier: workspace:*
         version: link:../packages/styles
       react:

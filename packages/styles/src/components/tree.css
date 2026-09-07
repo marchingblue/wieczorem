@@ -1,0 +1,94 @@
+/**
+ * mut tree — a quiet file-tree. rows indent under a hairline guide,
+ * the chevron answers instantly, the picked row stays sunken.
+ */
+
+.mut-tree-root {
+  font-family: var(--mut-font);
+  font-size: 13px;
+}
+
+.mut-tree,
+.mut-tree__kids {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mut-tree__kids {
+  margin-inline-start: 11px;
+  padding-inline-start: 8px;
+  border-inline-start: 1px solid var(--mut-line-soft);
+}
+
+.mut-tree__node {
+  min-width: 0;
+}
+
+.mut-tree__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px 8px;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color var(--mut-t-fast) ease,
+    color var(--mut-t-fast) ease;
+}
+
+.mut-tree__row:hover {
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+
+.mut-tree__row[data-selected="true"] {
+  background: color-mix(in srgb, var(--mut-ink) 10%, var(--mut-bg));
+  color: var(--mut-ink);
+}
+
+.mut-tree__row:focus-visible {
+  outline: 2px solid var(--mut-ring);
+  outline-offset: -2px;
+}
+
+.mut-tree__row[data-disabled="true"] {
+  color: var(--mut-ink-faint);
+  cursor: not-allowed;
+}
+
+.mut-tree__chev {
+  flex: none;
+  transform: rotate(-90deg);
+  transition: transform var(--mut-t-fast) var(--mut-press);
+  color: var(--mut-ink-faint);
+}
+.mut-tree__chev[data-open="true"] {
+  transform: rotate(0deg);
+}
+.mut-tree__row:hover .mut-tree__chev {
+  color: var(--mut-ink-muted);
+}
+
+.mut-tree__leaf {
+  flex: none;
+  width: 12px;
+}
+
+.mut-tree__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

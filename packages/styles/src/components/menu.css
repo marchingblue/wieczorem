@@ -26,6 +26,12 @@
   animation: mut-rise-in var(--mut-t-fast) var(--mut-press);
 }
 
+/* exit mirrors the entrance — useExit keeps the panel mounted with
+   data-closing until the fall finishes. */
+.mut-menu[data-closing="true"] {
+  animation: mut-rise-out var(--mut-t-fast) var(--mut-press) both;
+}
+
 .mut-menu[data-align="right"] {
   left: auto;
   right: 0;
@@ -103,7 +109,7 @@
   padding: 6px 10px 4px;
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--mut-ink-faint);
+  color: var(--mut-ink-muted);
   user-select: none;
 }
 

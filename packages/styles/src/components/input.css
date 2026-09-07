@@ -1,0 +1,169 @@
+/**
+ * mut input — a quiet text field. opaque surface, hairline border that
+ * wakes to ink on focus and danger on error. the label/required mark,
+ * description, and error stack in the field; prefix/suffix glue addons
+ * inside the frame. sizes: sm | md | lg. reads --mut-input-*.
+ */
+
+.mut-field {
+  --mut-input-radius: var(--mut-r-sm);
+  --mut-input-pad-y: 7px;
+  --mut-input-pad-x: 12px;
+
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+  font-family: var(--mut-font);
+}
+
+.mut-field[data-size="sm"] {
+  --mut-input-pad-y: 5px;
+  --mut-input-pad-x: 10px;
+}
+.mut-field[data-size="lg"] {
+  --mut-input-pad-y: 10px;
+  --mut-input-pad-x: 16px;
+}
+
+.mut-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--mut-ink);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mut-field__required {
+  color: var(--mut-danger);
+}
+
+.mut-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--mut-input-pad-y) var(--mut-input-pad-x);
+
+  background: var(--mut-bg);
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-input-radius);
+  cursor: text;
+
+  transition: border-color var(--mut-t-fast) ease;
+}
+
+.mut-input:hover {
+  border-color: var(--mut-ink-muted);
+}
+
+.mut-input:focus-within {
+  border-color: var(--mut-ink);
+}
+
+.mut-input__box {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--mut-ink);
+  caret-color: var(--mut-ink);
+}
+
+.mut-input__box::placeholder {
+  color: var(--mut-ink-faint);
+}
+
+.mut-input__box::file-selector-button {
+  margin-right: 12px;
+  padding: 3px 10px;
+  border: 1px solid var(--mut-line);
+  border-radius: var(--mut-r-xs);
+  background: color-mix(in srgb, var(--mut-ink) 5%, var(--mut-bg));
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--mut-ink);
+  cursor: pointer;
+}
+
+.mut-input__addon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  font-size: 13px;
+  color: var(--mut-ink-muted);
+  user-select: none;
+}
+
+.mut-field__desc {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--mut-ink-muted);
+}
+
+.mut-field__error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--mut-danger);
+}
+
+/* invalid: danger frame, quiet otherwise */
+.mut-field[data-invalid="true"] .mut-input {
+  border-color: var(--mut-danger);
+}
+.mut-field[data-invalid="true"] .mut-input:focus-within {
+  border-color: var(--mut-danger);
+}
+
+.mut-field[data-disabled="true"] {
+  opacity: 0.45;
+}
+.mut-field[data-disabled="true"] .mut-input,
+.mut-field[data-disabled="true"] .mut-input__box {
+  cursor: not-allowed;
+}
+
+/* date fields hide the native indicator — one quiet button opens it.
+   (chromium ignores display:none here, so zero it instead.) */
+.mut-input__box[type="date"]::-webkit-calendar-picker-indicator,
+.mut-input__box[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.mut-input__box[type="time"]::-webkit-calendar-picker-indicator,
+.mut-input__box[type="month"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.mut-input__picker {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mut-r-xs);
+  background: transparent;
+  color: var(--mut-ink-muted);
+  cursor: pointer;
+  transition:
+    color var(--mut-t-fast) ease,
+    background-color var(--mut-t-fast) ease;
+}
+.mut-input__picker:hover {
+  color: var(--mut-ink);
+  background: color-mix(in srgb, var(--mut-ink) 6%, var(--mut-bg));
+}

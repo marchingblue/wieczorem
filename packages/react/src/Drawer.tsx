@@ -16,10 +16,10 @@ export interface DrawerProps {
   children?: ReactNode;
   /** panel width for left/right, px or css length (default 320) */
   width?: number | string;
-  /** show the little bar on the leading edge (nice on sheets) */
+  /** show the little bar on the grab edge (nice on sheets) */
   handle?: boolean;
-  /** frost the overlay with a backdrop blur */
-  blur?: boolean;
+  /** frost the overlay — true for the default 4px, number for px */
+  blur?: boolean | number;
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -74,7 +74,12 @@ export function Drawer({
       className="mut-drawer-overlay"
       role="presentation"
       data-closing={closing || undefined}
-      data-blur={blur || undefined}
+      data-blur={blur ? "true" : undefined}
+      style={
+        typeof blur === "number"
+          ? ({ "--mut-drawer-blur": `${blur}px` }) as CSSProperties
+          : undefined
+      }
       onMouseDown={onOverlayMouseDown}
     >
       <div

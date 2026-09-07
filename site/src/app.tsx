@@ -10,6 +10,8 @@ import {
   Breadcrumbs,
   Dropdown,
   Select,
+  MultiSelect,
+  Input,
   ContextMenu,
   CommandMenu,
   CopyButton,
@@ -25,17 +27,39 @@ import {
   Spinner,
   Skeleton,
   Dropzone,
+  SidebarProvider,
   Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuAction,
+  SidebarTrigger,
+  SidebarWorkspace,
+  CopyIcon,
   Heatmap,
   Drawer,
-  CopyIcon,
-} from "@mut/react";
+  Tooltip,
+  Callout,
+  Collapsible,
+  SmartPagination,
+  Tree,
+  DateInput,
+  Table,
+  THead,
+  TBody,
+  TR,
+  TH,
+  TD,
+} from "@wieczorem/react";
 import {
   PencilIcon,
   SearchIcon,
   TrashIcon,
 } from "./icons.js";
-
 function Section({
   label,
   note,
@@ -74,6 +98,15 @@ const genreOptions = [
   { value: "synthwave" },
 ];
 
+const zoneOptions = [
+  { value: "eastern", group: "americas" },
+  { value: "pacific", group: "americas" },
+  { value: "gmt", group: "europe" },
+  { value: "cet", group: "europe" },
+  { value: "jst", group: "asia/pacific" },
+  { value: "aest", group: "asia/pacific" },
+];
+
 const heatmapCells = Array.from({ length: 7 * 20 }, (_, i) => ({
   level: [0, 0, 1, 2, 0, 3, 4, 1, 0, 2][
     (i * 7 + Math.floor(i / 7)) % 10
@@ -95,15 +128,17 @@ export default function App() {
   const [view, setView] = useState("editor");
   const [checked, setChecked] = useState(true);
   const [code, setCode] = useState("");
+  const [flavor, setFlavor] = useState("");
+  const [stack, setStack] = useState<string[]>(["paper"]);
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState<string[]>([
     "field recordings",
     "modern classical",
   ]);
-  const [flavor, setFlavor] = useState("");
   const [vol, setVol] = useState(40);
   const [range, setRange] = useState<[number, number]>([25, 75]);
   const [progress, setProgress] = useState(64);
+  const [page, setPage] = useState(3);
 
   useEffect(() => {
     document.documentElement.setAttribute(
@@ -127,7 +162,7 @@ export default function App() {
     <div className="wrap">
       <header className="masthead">
         <div className="wordmark">
-          mut/ui <span>— calm components</span>
+          wieczorem <span>— calm components</span>
         </div>
         <div className="masthead-right">
           <span className="ver">0.1.0</span>
@@ -284,7 +319,7 @@ export default function App() {
           />
         </Section>
 
-        <Section label="select">
+        <Section label="select" note="single closes on pick; multi keeps the list open and grows chips.">
           <Select
             aria-label="flavor"
             value={flavor}
@@ -308,6 +343,42 @@ export default function App() {
               { value: "monthly" },
             ]}
           />
+          <MultiSelect
+            aria-label="flavors"
+            value={stack}
+            onChange={setStack}
+            placeholder="pick flavors…"
+            options={[
+              { value: "paper" },
+              { value: "gravel" },
+              { value: "fog" },
+              { value: "ink" },
+            ]}
+          />
+        </Section>
+
+        <Section label="input" note="label, hint, and error stack in the field; addons glue inside the frame.">
+          <div className="col">
+            <Input
+              label="callsign"
+              placeholder="night-owl"
+              description="lowercase, no spaces — heard once, remembered."
+            />
+            <Input
+              label="frequency"
+              placeholder="0.00"
+              suffix="mhz"
+              size="sm"
+            />
+            <Input
+              label="password"
+              type="password"
+              defaultValue="hunter2hunter2"
+              error="too short — 12 characters minimum."
+            />
+            <Input label="locked" defaultValue="read me, don't touch me" disabled />
+            <DateInput label="launch day" defaultValue="2026-09-07" />
+          </div>
         </Section>
 
         <Section
@@ -337,9 +408,9 @@ export default function App() {
         </Section>
 
         <Section label="copy to clipboard">
-          <CopyButton value="pnpm add @mut/react" aria-label="copy install command" />
-          <span className="inline-code">pnpm add @mut/react</span>
-          <CopyButton value="mut/ui" aria-label="copy name" />
+          <CopyButton value="pnpm add @wieczorem/react" aria-label="copy install command" />
+          <span className="inline-code">pnpm add @wieczorem/react</span>
+          <CopyButton value="wieczorem" aria-label="copy name" />
         </Section>
 
         <Section label="checkbox" note="no check mark — the box fills and answers with a small dot.">
@@ -352,7 +423,7 @@ export default function App() {
           <Checkbox label="locked" disabled />
         </Section>
 
-        <Section label="radio" note="one dot in a circle; the dot pops in.">
+        <Section label="radio" note="one dot in a circle; the dot pops in. rows, stacks, or choice cards.">
           <RadioGroup
             aria-label="tempo"
             defaultValue="slow"
@@ -364,6 +435,24 @@ export default function App() {
             ]}
           />
           <Radio name="solo" label="solo radio" />
+          <RadioGroup
+            aria-label="seat"
+            orientation="vertical"
+            defaultValue="window"
+            items={[
+              { value: "window", label: "window", description: "watch the night pass" },
+              { value: "aisle", label: "aisle", description: "stretch your legs" },
+            ]}
+          />
+          <RadioGroup
+            aria-label="plan"
+            variant="card"
+            defaultValue="night"
+            items={[
+              { value: "day", label: "day", description: "bright and loud" },
+              { value: "night", label: "night", description: "quiet and calm" },
+            ]}
+          />
         </Section>
 
         <Section label="otp" note="joined cells — one shape, like a button group.">
@@ -385,6 +474,8 @@ export default function App() {
             value={genre}
             onChange={setGenre}
             placeholder="pick a genre…"
+            chevron
+            showClear
             options={genreOptions}
           />
           <ComboboxMulti
@@ -392,13 +483,20 @@ export default function App() {
             value={genres}
             onChange={setGenres}
             placeholder="add genres…"
+            chevron
             options={genreOptions}
+          />
+          <Combobox
+            aria-label="timezone"
+            placeholder="pick a timezone…"
+            chevron
+            options={zoneOptions}
           />
         </Section>
 
         <Section
           label="slider"
-          note="a rounded square with a circular dot. arrows step, page keys jump by ten, drag anywhere on the rail."
+          note="a bright square with a dark mark. arrows step, page keys jump by ten, drag anywhere on the rail."
         >
           <div className="col">
             <Row label={`volume — ${vol}`}>
@@ -438,11 +536,12 @@ export default function App() {
           <Badge look="outline">outline</Badge>
         </Section>
 
-        <Section label="progress" note="pass no value and a bar patrols.">
+        <Section label="progress" note="pass no value and a bar patrols. a label earns the titlebar row.">
           <div className="col">
             <Row label={`loading — ${progress}%`}>
               <ProgressBar value={progress} aria-label="progress" />
             </Row>
+            <ProgressBar value={progress} label="upload progress" />
             <div className="row">
               <span className="row-label">set</span>
               <ButtonGroup>
@@ -478,48 +577,160 @@ export default function App() {
 
         <Section
           label="dropzone"
-          note="dashed | dotted | solid. a corner trace while you hover files over it, a drawn check when they land."
+          note="dashed | solid. a corner trace while you hover files over it, a drawn check when they land."
         >
           <div className="col">
             <Dropzone
               hint="any file, any size — it's a demo"
               onFiles={(files) => console.log("dropped:", files)}
             />
-            <Dropzone style="dotted" label="dotted flavor" />
             <Dropzone style="solid" label="solid flavor" />
           </div>
         </Section>
 
         <Section
           label="sidebar"
-          note="a widget, not a page column — an inset panel with quiet sections."
+          note="composable: the provider owns the state, parts compose inside. ctrl+b toggles, collapses to an icon rail."
         >
-          <Sidebar
-            width={230}
-            sections={[
+          <SidebarProvider width={240}>
+            <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+              <Sidebar>
+                <SidebarHeader>
+                  <SidebarWorkspace name="acme" onSelect={() => console.log("workspace")} />
+                </SidebarHeader>
+                <SidebarContent>
+                  <SidebarGroup label="workspace">
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton label="overview" isActive />
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton label="deployments" badge={<Badge>3</Badge>} />
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton label="domains" />
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroup>
+                  <SidebarGroup
+                    label="account"
+                    action={
+                      <SidebarMenuAction label="add account">
+                        <PencilIcon size={12} />
+                      </SidebarMenuAction>
+                    }
+                  >
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton label="billing" />
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton label="keys" />
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton label="danger zone" disabled />
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarGroup>
+                </SidebarContent>
+                <SidebarFooter>wieczorem — calm components</SidebarFooter>
+              </Sidebar>
+              <SidebarTrigger />
+            </div>
+          </SidebarProvider>
+        </Section>
+        <Section label="heatmap" note="github-style, all greyscale.">
+          <Heatmap cells={heatmapCells} legend />
+        </Section>
+
+        <Section label="tooltip" note="hover waits a beat, keyboard shows at once, escape dismisses.">
+          <Tooltip content="copies the install line">
+            <Button shape="icon" aria-label="copy install line">
+              <CopyIcon size={13} />
+            </Button>
+          </Tooltip>
+          <Tooltip content="deletes the draft" side="bottom">
+            <Button shape="icon" variant="danger" aria-label="delete draft">
+              <TrashIcon />
+            </Button>
+          </Tooltip>
+        </Section>
+
+        <Section label="callout" note="ink by default; a tone only when the meaning needs the eye.">
+          <div className="col" style={{ gap: 8 }}>
+            <Callout title="nightly built">
+              the quiet build finished while you were away. nothing to do.
+            </Callout>
+            <Callout title="disk almost full" tone="warning">
+              two releases left at this size. archive something soon.
+            </Callout>
+            <Callout title="deploy failed" tone="danger">
+              the last push never landed. the previous build still serves.
+            </Callout>
+          </div>
+        </Section>
+
+        <Section label="collapsible" note="the panel unfolds with the grid glide — no measuring, no jump.">
+          <div className="col" style={{ gap: 8 }}>
+            <Collapsible trigger="release notes" defaultOpen>
+              <p className="sec-note">quieter rails, softer switches, a sidebar that minds its business.</p>
+            </Collapsible>
+            <Collapsible trigger="keyboard shortcuts">
+              <p className="sec-note">ctrl+b toggles the sidebar, ⌘K opens the palette, escape closes everything.</p>
+            </Collapsible>
+          </div>
+        </Section>
+
+        <Section label="tree" note="right expands, left collapses, enter picks.">
+          <Tree
+            aria-label="files"
+            defaultExpanded={["src"]}
+            defaultSelected="app"
+            items={[
               {
-                label: "workspace",
-                items: [
-                  { label: "overview", active: true },
-                  { label: "deployments", badge: <Badge>3</Badge> },
-                  { label: "domains" },
+                value: "src",
+                label: "src",
+                children: [
+                  { value: "app", label: "app.tsx" },
+                  { value: "grid", label: "grid.css" },
                 ],
               },
-              {
-                label: "account",
-                items: [
-                  { label: "billing" },
-                  { label: "keys" },
-                  { label: "danger zone", disabled: true },
-                ],
-              },
+              { value: "readme", label: "readme.md" },
             ]}
-            footer="mut/ui — calm components"
           />
         </Section>
 
-        <Section label="heatmap" note="github-style, all greyscale.">
-          <Heatmap cells={heatmapCells} legend />
+        <Section label="table" note="hairlines, hover wash, sunken picks. compose freely.">
+          <Table>
+            <THead>
+              <TR>
+                <TH>release</TH>
+                <TH>landed</TH>
+                <TH numeric>tracks</TH>
+              </TR>
+            </THead>
+            <TBody>
+              <TR selected>
+                <TD>night-12</TD>
+                <TD>today</TD>
+                <TD numeric>9</TD>
+              </TR>
+              <TR>
+                <TD>night-11</TD>
+                <TD>yesterday</TD>
+                <TD numeric>7</TD>
+              </TR>
+              <TR>
+                <TD>night-10</TD>
+                <TD>last week</TD>
+                <TD numeric>11</TD>
+              </TR>
+            </TBody>
+          </Table>
+        </Section>
+
+        <Section label="pagination" note="the current page stays sunken, gaps become an ellipsis.">
+          <SmartPagination total={12} value={page} onChange={setPage} aria-label="releases" />
         </Section>
 
         <Section
@@ -574,7 +785,6 @@ export default function App() {
         tone="danger"
         title="delete everything?"
         confirmLabel="delete"
-        onOpenChange={setDangerOpen}
         onConfirm={() => console.log("deleted (not really)")}
       >
         this action cannot be undone. the quiet ones are always the most
@@ -585,6 +795,7 @@ export default function App() {
         open={modalOpen}
         title="a quiet interruption"
         onOpenChange={setModalOpen}
+        blur
       >
         <p className="mut-dialog__body">
           the modal rises in and falls out the same way. compose your own
@@ -603,7 +814,7 @@ export default function App() {
         onOpenChange={setCmdOpen}
         items={[
           { value: "new file", label: "new file", group: "actions", keys: ["⌘", "N"], icon: <PencilIcon size={13} />, onSelect: () => console.log("new file") },
-          { value: "copy install command", label: "copy install command", group: "actions", icon: <CopyIcon size={13} />, onSelect: () => navigator.clipboard?.writeText("pnpm add @mut/react") },
+          { value: "copy install command", label: "copy install command", group: "actions", icon: <CopyIcon size={13} />, onSelect: () => navigator.clipboard?.writeText("pnpm add @wieczorem/react") },
           { value: "delete workspace", label: "delete workspace", group: "actions", icon: <TrashIcon size={13} />, onSelect: () => console.log("delete") },
           { value: "toggle theme", label: "toggle theme", group: "preferences", keys: ["⌘", "L"], onSelect: () => setDark((d) => !d) },
           { value: "search docs", label: "search docs", group: "navigate", keys: ["/"], icon: <SearchIcon size={13} />, onSelect: () => console.log("docs") },

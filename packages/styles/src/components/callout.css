@@ -1,0 +1,50 @@
+/**
+ * mut callout — a bordered note for news that must survive a scroll-by.
+ * quiet ink by default; success, warning, and danger tints only when
+ * the meaning needs the eye. tones: default | success | warning | danger.
+ * reads --mut-callout-*.
+ */
+
+.mut-callout {
+  --mut-callout-border: var(--mut-line);
+  --mut-callout-bg: color-mix(in srgb, var(--mut-ink) 3%, var(--mut-bg));
+  --mut-callout-title: var(--mut-ink);
+
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 14px;
+
+  background: var(--mut-callout-bg);
+  border: 1px solid var(--mut-callout-border);
+  border-radius: var(--mut-r-sm);
+
+  font-family: var(--mut-font);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--mut-ink-muted);
+}
+
+.mut-callout[data-tone="success"] {
+  --mut-callout-border: color-mix(in srgb, var(--mut-success) 45%, var(--mut-line));
+  --mut-callout-bg: color-mix(in srgb, var(--mut-success) 8%, var(--mut-bg));
+}
+.mut-callout[data-tone="warning"] {
+  --mut-callout-border: color-mix(in srgb, var(--mut-warning) 45%, var(--mut-line));
+  --mut-callout-bg: color-mix(in srgb, var(--mut-warning) 10%, var(--mut-bg));
+}
+.mut-callout[data-tone="danger"] {
+  --mut-callout-border: color-mix(in srgb, var(--mut-danger) 45%, var(--mut-line));
+  --mut-callout-bg: color-mix(in srgb, var(--mut-danger) 7%, var(--mut-bg));
+}
+
+.mut-callout__title {
+  margin-bottom: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--mut-callout-title);
+}
+
+.mut-callout__body {
+  overflow-wrap: anywhere;
+}

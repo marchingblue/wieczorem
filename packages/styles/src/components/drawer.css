@@ -21,13 +21,14 @@
 }
 
 .mut-drawer-overlay[data-blur="true"] {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(var(--mut-drawer-blur, 4px));
+  -webkit-backdrop-filter: blur(var(--mut-drawer-blur, 4px));
 }
 
 .mut-drawer {
   --mut-drawer-w: 320px;
 
+  position: relative;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -110,8 +111,9 @@
   height: 32px;
   transform: translateY(-50%);
 }
-.mut-drawer[data-side="left"] .mut-drawer__handle { left: 6px; }
-.mut-drawer[data-side="right"] .mut-drawer__handle { right: 6px; }
+/* the grab edge faces the content — the side you push it back toward */
+.mut-drawer[data-side="left"] .mut-drawer__handle { right: 6px; }
+.mut-drawer[data-side="right"] .mut-drawer__handle { left: 6px; }
 
 .mut-drawer[data-side="top"] .mut-drawer__handle,
 .mut-drawer[data-side="bottom"] .mut-drawer__handle {
@@ -120,8 +122,8 @@
   height: 3px;
   transform: translateX(-50%);
 }
-.mut-drawer[data-side="top"] .mut-drawer__handle { top: 6px; }
-.mut-drawer[data-side="bottom"] .mut-drawer__handle { bottom: 6px; }
+.mut-drawer[data-side="top"] .mut-drawer__handle { bottom: 6px; }
+.mut-drawer[data-side="bottom"] .mut-drawer__handle { top: 6px; }
 
 @keyframes mut-drawer-left {
   from { transform: translateX(-100%); }

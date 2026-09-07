@@ -55,7 +55,7 @@
 }
 
 .mut-otp__cell[data-filled="true"] {
-  background: color-mix(in srgb, var(--mut-ink) 7%, transparent);
+  background: color-mix(in srgb, var(--mut-ink) 7%, var(--mut-bg));
 }
 
 .mut-otp[data-disabled="true"] .mut-otp__cell {

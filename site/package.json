@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mut/react": "workspace:*",
-    "@mut/styles": "workspace:*",
+    "@wieczorem/react": "workspace:*",
+    "@wieczorem/styles": "workspace:*",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

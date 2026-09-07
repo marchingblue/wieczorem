@@ -68,13 +68,64 @@ export {
 } from "./ProgressBar.js";
 export { Spinner, type SpinnerProps } from "./Spinner.js";
 export { Dropzone, type DropzoneProps } from "./Dropzone.js";
-export { Sidebar, type SidebarItem, type SidebarSection, type SidebarProps } from "./Sidebar.js";
+export { Skeleton, type SkeletonProps } from "./Skeleton.js";
+export {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuAction,
+  SidebarMenuSub,
+  SidebarTrigger,
+  SidebarRail,
+  SidebarWorkspace,
+  useSidebar,
+  type SidebarProviderProps,
+  type SidebarProps,
+  type SidebarGroupProps,
+  type SidebarMenuButtonProps,
+  type SidebarWorkspaceProps,
+  type SidebarCollapsible,
+  type SidebarVariant,
+} from "./Sidebar.js";
+export { MultiSelect, type MultiSelectOption, type MultiSelectProps } from "./MultiSelect.js";
+export { Tooltip, type TooltipProps } from "./Tooltip.js";
+export { Callout, type CalloutProps } from "./Callout.js";
+export { Collapsible, type CollapsibleProps } from "./Collapsible.js";
+export {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+  SmartPagination,
+  type PaginationProps,
+} from "./Pagination.js";
+export { Tree, type TreeItem, type TreeProps } from "./Tree.js";
+export { DateInput, type DateInputProps } from "./DateInput.js";
+export { Input, type InputProps } from "./Input.js";
+export {
+  Table,
+  THead,
+  TBody,
+  TR,
+  TH,
+  TD,
+} from "./Table.js";
 export { Heatmap, type HeatmapCell, type HeatmapProps } from "./Heatmap.js";
 export { Drawer, type DrawerProps } from "./Drawer.js";
-export { Skeleton, type SkeletonProps } from "./Skeleton.js";
 export {
   ChevronDownIcon,
   CheckIcon,
   CopyIcon,
+  CalendarIcon,
+  PanelCollapseIcon,
   XIcon,
 } from "./icons.js";

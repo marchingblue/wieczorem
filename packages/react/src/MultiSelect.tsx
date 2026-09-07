@@ -3,25 +3,27 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { Button, type ButtonProps } from "./Button.js";
+import type { ButtonProps } from "./Button.js";
 import { ChevronDownIcon } from "./icons.js";
+import { XIcon } from "./icons.js";
 import { useExit } from "./useExit.js";
 
-export interface SelectOption {
+export interface MultiSelectOption {
   value: string;
   label?: ReactNode;
   disabled?: boolean;
 }
 
-export interface SelectProps {
-  options: SelectOption[];
-  /** controlled selected value */
-  value?: string;
+export interface MultiSelectProps {
+  options: MultiSelectOption[];
+  /** controlled selected values (order = chip order) */
+  value?: string[];
   /** initial selection for uncontrolled usage */
-  defaultValue?: string;
-  onChange?: (value: string) => void;
+  defaultValue?: string[];
+  onChange?: (value: string[]) => void;
   /** shown when nothing is selected */
   placeholder?: string;
   /** which side of the trigger the panel hugs */
@@ -34,40 +36,31 @@ export interface SelectProps {
 }
 
 /**
- * a closed trigger that opens the quiet list — shadcn behavior, mut feel.
- * the chosen value sits in the trigger; picking closes immediately.
- * arrows move, enter picks, escape closes.
+ * a select that keeps the list open and grows chips. picking toggles,
+ * chips carry a quiet × that slides them down and out, escape or outside
+ * click closes — and the close mirrors the open.
  */
-export function Select({
+export function MultiSelect({
   options,
   value,
-  defaultValue,
+  defaultValue = [],
   onChange,
   placeholder = "select…",
   align = "left",
-  variant,
-  size,
   disabled,
   className,
   ...rest
-}: SelectProps) {
-  const [internal, setInternal] = useState(defaultValue);
-  const selected = value ?? internal;
+}: MultiSelectProps) {
+  const [internal, setInternal] = useState<string[]>(defaultValue);
+  const current = value ?? internal;
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(-1);
   // show lingers through the exit animation; closing flags it for css.
   const [show, closing] = useExit(open);
+  const [active, setActive] = useState(-1);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const listId = useId();
-
-  const selectedOpt = options.find((o) => o.value === selected);
-
-  const commit = (v: string) => {
-    if (value === undefined) setInternal(v);
-    onChange?.(v);
-  };
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -83,24 +76,36 @@ export function Select({
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open ]);
 
   useLayoutEffect(() => {
     const el = listRef.current?.querySelector('[data-active="true"]');
     el?.scrollIntoView({ block: "nearest" });
   }, [active, open]);
 
-  const openList = () => {
-    if (disabled) return;
-    setOpen(true);
-    setActive(
-      options.findIndex((o) => o.value === selected && !o.disabled),
-    );
+  const commit = (next: string[]) => {
+    if (value === undefined) setInternal(next);
+    onChange?.(next);
   };
 
-  const pick = (v: string) => {
-    commit(v);
-    setOpen(false);
+  const toggle = (v: string) => {
+    if (current.includes(v)) {
+      remove(v);
+    } else {
+      commit([...current, v]);
+    }
+  };
+
+  // removal is instant — exit animations on chips read as lag, not polish.
+  const remove = (v: string) => {
+    commit(current.filter((s) => s !== v));
+  };
+
+  const chips = current;
+
+  const labelOf = (v: string) => {
+    const opt = options.find((o) => o.value === v);
+    return opt?.label ?? v;
   };
 
   const move = (dir: 1 | -1) => {
@@ -113,11 +118,11 @@ export function Select({
     if (next) setActive(next.i);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (disabled) return;
-    if (!open && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+    if (!open && (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
-      openList();
+      setOpen(true);
       return;
     }
     if (!open) return;
@@ -127,11 +132,11 @@ export function Select({
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       move(-1);
-    } else if (e.key === "Enter") {
+    } else if (e.key === "Enter" || e.key === " ") {
       const opt = options[active];
       if (opt && !opt.disabled) {
         e.preventDefault();
-        pick(opt.value);
+        toggle(opt.value);
       }
     }
   };
@@ -144,26 +149,46 @@ export function Select({
       // leaving, while the panel finishes its exit underneath.
       data-open={open}
     >
-      <Button
-        variant={variant}
-        size={size}
-        className="mut-select__trigger"
+      <div
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        className="mut-select__multi"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={show ? listId : undefined}
-        disabled={disabled}
-        onClick={() => (open ? setOpen(false) : openList())}
+        aria-disabled={disabled}
+        data-disabled={disabled || undefined}
+        onClick={() => {
+          if (!disabled) setOpen((o) => !o);
+        }}
         onKeyDown={handleKeyDown}
         {...rest}
       >
-        <span
-          className="mut-select__value"
-          data-placeholder={selectedOpt ? undefined : "true"}
-        >
-          {selectedOpt ? (selectedOpt.label ?? selectedOpt.value) : placeholder}
-        </span>
+        {chips.map((v) => (
+          <span
+            key={v}
+            className="mut-select__chip"
+          >
+            {labelOf(v)}
+            <button
+              type="button"
+              className="mut-select__chip-x"
+              aria-label={`remove ${v}`}
+              disabled={disabled}
+              onClick={(e) => {
+                e.stopPropagation();
+                remove(v);
+              }}
+            >
+              <XIcon size={9} />
+            </button>
+          </span>
+        ))}
+        {current.length === 0 ? (
+          <span className="mut-select__placeholder">{placeholder}</span>
+        ) : null}
         <ChevronDownIcon className="mut-chevron" />
-      </Button>
+      </div>
       {show ? (
         <div
           ref={listRef}
@@ -172,6 +197,7 @@ export function Select({
           data-closing={closing || undefined}
           id={listId}
           role="listbox"
+          aria-multiselectable="true"
         >
           {options.map((o, i) => (
             <button
@@ -179,11 +205,11 @@ export function Select({
               type="button"
               role="option"
               className="mut-menu__item"
-              aria-selected={o.value === selected}
+              aria-selected={current.includes(o.value)}
               data-active={i === active ? "true" : undefined}
               disabled={o.disabled}
               onMouseEnter={() => setActive(i)}
-              onClick={() => pick(o.value)}
+              onClick={() => toggle(o.value)}
             >
               <span>{o.label ?? o.value}</span>
             </button>
